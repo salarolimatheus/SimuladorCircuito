@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <sorocaba.peteca.com.simuladorcircuito.graficosgerador.Grafico
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.925"
+        android:id="@+id/graficoUm"/>
+
+    <sorocaba.peteca.com.simuladorcircuito.graficosgerador.Grafico
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.925"
+        android:id="@+id/graficoDois"/>
+
+    <sorocaba.peteca.com.simuladorcircuito.Resultados
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.15"
+        android:id="@+id/resultados"/>
+
+    <sorocaba.peteca.com.simuladorcircuito.circuitogerador.Circuito
+        android:id="@+id/circuito"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
+</LinearLayout>
