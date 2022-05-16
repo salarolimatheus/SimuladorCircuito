@@ -260,4 +260,8 @@ public class Circuito extends View {
     public void setComponentesColoridosStatus(boolean componentesColoridosStatus) {
         this.componentesColoridosStatus = componentesColoridosStatus;
     }
+
+    public void setAnimacao(boolean animacao) {
+        //TODO: TEM QUE PENSAR AINDA COMO VAI FAZER ESSA SIMULAÇÃO
+    }
 }

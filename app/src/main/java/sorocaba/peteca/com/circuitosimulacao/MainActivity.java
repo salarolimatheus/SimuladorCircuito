@@ -9,10 +9,15 @@ import sorocaba.peteca.com.simuladorcircuito.graficosgerador.Serie;
 
 import android.graphics.Color;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 
 public class MainActivity extends AppCompatActivity implements IntefaceSimulador {
     double[] valores, valoresA, valoresB, valoresX, valoresY, valoresZ;
     SimuladorCircuito simulador;
+    private boolean animacao = false;
+    private boolean animacaoResumePause = false;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,7 +46,7 @@ public class MainActivity extends AppCompatActivity implements IntefaceSimulador
         simulador.setNomeEixosGraficoUm("V", "ωt");
         simulador.setNomeEixosGraficoDois("A", "ωt");
 
-        simulador.setNumeroPeriodos(3);
+        simulador.setNumeroPeriodos(1);
         simulador.setCursorConfig(Color.BLUE, 3);
         simulador.setCursorStatus(true);
         simulador.setGradeStatus(true);
@@ -71,6 +76,24 @@ public class MainActivity extends AppCompatActivity implements IntefaceSimulador
         simulador.setCircuitoGrade(true);
 
         simulador.setSimuladorListener(this);
+
+        Button botaoAnimar = findViewById(R.id.botao_animar);
+        botaoAnimar.setOnClickListener(view -> {
+            if (animacaoResumePause)
+                simulador.resumeAnimacao();
+            else
+                simulador.pauseAnimacao();
+            animacaoResumePause = !animacaoResumePause;
+        });
+
+        botaoAnimar.setOnLongClickListener(view -> {
+            if (animacao)
+                simulador.startAnimacao();
+            else
+                simulador.stopAnimacao();
+            animacao = !animacao;
+            return true;
+        });
     }
 
     @Override
@@ -95,20 +118,6 @@ public class MainActivity extends AppCompatActivity implements IntefaceSimulador
 
     @Override
     public int carregaCircuito(Circuito circuito) {
-//        circuito.trilha(new Ponto(5, 5), new Ponto(15, 15)); // Fonte
-//        circuito.terra(new Ponto(10, 6), new Ponto(10, 9)); // Fonte
-
-//        circuito.trilha(new Ponto(15, 5), new Ponto(15, 15)); // Fonte
-//        circuito.trilha(new Ponto(16, 5), new Ponto(16, 15)); // Fonte
-//        circuito.bobina(new Ponto(12, 15), new Ponto(12, 5)); // Fonte
-//        circuito.bobina(new Ponto(18, 5), new Ponto(18, 10)); // Fonte
-//        circuito.bobina(new Ponto(18, 10), new Ponto(18, 15)); // Fonte
-
-//        circuito.trilha(new Ponto(12, 9), new Ponto(18, 9)); // Fonte
-//        circuito.trilha(new Ponto(12, 10), new Ponto(18, 10)); // Fonte
-//        circuito.bobina(new Ponto(12, 12), new Ponto(18, 12)); // Fonte
-//        circuito.bobina(new Ponto(18, 7), new Ponto(12, 7)); // Fonte
-
         circuito.componente(new Ponto(9, 18), new Ponto(9, 12), 1, 1); // Fonte
         circuito.trilha(new Ponto(9, 12), new Ponto(9, 6), new Ponto(24, 6));
         circuito.componente(new Ponto(24, 6), new Ponto(30, 6), 2, 2); // Diodo

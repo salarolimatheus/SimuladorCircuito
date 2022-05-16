@@ -34,6 +34,7 @@ public class Grafico extends View {
     private boolean cursorStatus = false, gradeStatus = false, betaStatus = false, ondasSimultaneasStatus = false;
     private float tamanhoMarcacoes = 0.05f, tamanhoText = 1.5f, subtamanhoText = 1.3f;
     public Serie serieEscolhida, seriePrimaria, serieSecundaria, serieTerciaria;
+    private boolean animacao = false;
 
     public Grafico(Context context) {
         super(context);
@@ -215,9 +216,11 @@ public class Grafico extends View {
         pontoDoCursor = (int) ((x * serieEscolhida.tamanho) / Vm);
     }
     public void changeCursor(MotionEvent event) {
-        cursor = event.getX();
-        changeCursor();
-        invalidate();
+        if (!animacao) {
+            cursor = event.getX();
+            changeCursor();
+            invalidate();
+        }
     }
     private void changeCursor() {
         if (cursor < larguraPontoY) cursor = larguraPontoY;
@@ -434,6 +437,21 @@ public class Grafico extends View {
         paintCurvasTerciaria.setStrokeWidth(curvaWidth * 0.8f);
         paintCurvasFundo.setStrokeWidth(curvaWidth * 0.8f);
     }
+
+    public int getNumeroPeriodos() {
+        return periodosReais;
+    }
+
+    public int getSerieTamanho() {
+        return serieEscolhida.tamanho;
+    }
+    public float getDimensaoX1Cursor() {
+        return larguraPontoY;
+    }
+    public float getDimensaoX2Cursor() {
+        return (larguraPontoY+larguraPontoX);
+    }
+
     //endregion
 
     public void removePathFundo() {
@@ -447,5 +465,9 @@ public class Grafico extends View {
             for (int i = 1; i < serieFundo.tamanho; i++)
                 pathCurvasFundo.lineTo((i * (direita - esquerda) / serieFundo.tamanho) + esquerda, (float) ((serieFundo.valor[i] / valorMaximo) * (alturaPontoY - alturaPontoX)) + alturaPontoX);
         }
+    }
+
+    public void setAnimacao(boolean animacao) {
+        this.animacao = animacao;
     }
 }

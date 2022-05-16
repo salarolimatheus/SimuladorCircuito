@@ -3,6 +3,7 @@ package sorocaba.peteca.com.simuladorcircuito;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Color;
+import android.os.CountDownTimer;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -18,8 +19,10 @@ public class SimuladorCircuito extends LinearLayout implements Circuito.Interfac
     private Grafico graficoUm, graficoDois;
     private Circuito circuito;
     private Resultados resultados;
+    private CountDownTimer timer = null;
 
     IntefaceSimulador intefaceSimulador;
+    private boolean animacao = false;
 
     public void setSimuladorListener(IntefaceSimulador intefaceSimulador) {
         this.intefaceSimulador = intefaceSimulador;
@@ -48,34 +51,25 @@ public class SimuladorCircuito extends LinearLayout implements Circuito.Interfac
         resultados.setColorCorrente(Color.BLUE);
         resultados.setColorAngulo(Color.BLACK);
 
-        graficoUm.setOnTouchListener(new OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                    graficoUm.changeCursor(event);
-                    graficoDois.setCursor(graficoUm.getCursor());
-                    resultados.atualizarDados(graficoUm.pegaValorAtual(), graficoDois.pegaValorAtual(), graficoUm.pegaAnguloAtual());
-                return true;
-            }
-        });
-
-        graficoDois.setOnTouchListener(new OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                    graficoDois.changeCursor(event);
-                    graficoUm.setCursor(graficoDois.getCursor());
-                resultados.atualizarDados(graficoUm.pegaValorAtual(), graficoDois.pegaValorAtual(), graficoDois.pegaAnguloAtual());
-                return true;
-            }
-        });
-
-        circuito.setOnTouchListener(new OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent event) {
-                circuito.ToqueNaTela(event);
-                intefaceSimulador.componenteClickado(circuito.componenteSelecionado());
+        graficoUm.setOnTouchListener((v, event) -> {
+                graficoUm.changeCursor(event);
+                graficoDois.setCursor(graficoUm.getCursor());
                 resultados.atualizarDados(graficoUm.pegaValorAtual(), graficoDois.pegaValorAtual(), graficoUm.pegaAnguloAtual());
-                return true;
-            }
+            return true;
+        });
+
+        graficoDois.setOnTouchListener((v, event) -> {
+                graficoDois.changeCursor(event);
+                graficoUm.setCursor(graficoDois.getCursor());
+            resultados.atualizarDados(graficoUm.pegaValorAtual(), graficoDois.pegaValorAtual(), graficoDois.pegaAnguloAtual());
+            return true;
+        });
+
+        circuito.setOnTouchListener((v, event) -> {
+            circuito.ToqueNaTela(event);
+            intefaceSimulador.componenteClickado(circuito.componenteSelecionado());
+            resultados.atualizarDados(graficoUm.pegaValorAtual(), graficoDois.pegaValorAtual(), graficoUm.pegaAnguloAtual());
+            return true;
         });
     }
 
@@ -229,4 +223,76 @@ public class SimuladorCircuito extends LinearLayout implements Circuito.Interfac
         circuito.setNumeroDivisoesPrincipais(numeroDivisoesPrincipais);
     }
     //endregion
+
+    public void startAnimacao() {
+        this.animacao = true;
+        graficoUm.setAnimacao(true);
+        graficoDois.setAnimacao(true);
+        circuito.setAnimacao(true);
+
+        criarTimerSimulacao();
+    }
+    public void resumeAnimacao() {
+        if (animacao) {
+            graficoUm.setAnimacao(true);
+            graficoDois.setAnimacao(true);
+            long tempoInicial = (long) (6000f * (1 - ((graficoUm.getCursor()-graficoUm.getDimensaoX1Cursor())/graficoUm.getDimensaoX2Cursor())));
+            long tempoTick = 6000/((long) graficoUm.getSerieTamanho() * graficoUm.getNumeroPeriodos());
+            timer = new CountDownTimer(tempoInicial, tempoTick) {
+
+                public void onTick(long millisUntilFinished) {
+                    float cursor = (graficoUm.getDimensaoX1Cursor() + (1 - millisUntilFinished / 6000f) * graficoUm.getDimensaoX2Cursor());
+                    atualizaAnimacao(cursor);
+                }
+
+                public void onFinish() {
+                    criarTimerSimulacao();
+                }
+
+            }.start();
+        }
+    }
+    public void pauseAnimacao() {
+        if (animacao) {
+            timer.cancel();
+            graficoUm.setAnimacao(false);
+            graficoDois.setAnimacao(false);
+        }
+    }
+    public void stopAnimacao() {
+        this.animacao = false;
+        graficoUm.setAnimacao(false);
+        graficoDois.setAnimacao(false);
+        circuito.setAnimacao(false);
+        if(timer != null)
+            timer.cancel();
+    }
+
+    private void criarTimerSimulacao() {
+        long tempoInicial = 6000;
+        long tempoTick = 6000/((long) graficoUm.getSerieTamanho() * graficoUm.getNumeroPeriodos());
+        timer = new CountDownTimer(tempoInicial, tempoTick) {
+
+            public void onTick(long millisUntilFinished) {
+                float cursor = (graficoUm.getDimensaoX1Cursor() + (1 - millisUntilFinished / 6000f) * graficoUm.getDimensaoX2Cursor());
+                atualizaAnimacao(cursor);
+            }
+
+            public void onFinish() {
+                timer.start();
+            }
+
+        }.start();
+    }
+    private void atualizaAnimacao(float cursor) {
+        graficoDois.setCursor(cursor);
+        graficoUm.setCursor(cursor);
+        resultados.atualizarDados(graficoUm.pegaValorAtual(), graficoDois.pegaValorAtual(), graficoUm.pegaAnguloAtual());
+    }
+
+    //TODO: You need to call cTtimer.cancel() whenever the onDestroy()/onDestroyView() in the owning Activity/Fragment is called
+    public void cancelTimer() {
+        if(timer != null)
+            timer.cancel();
+    }
 }
