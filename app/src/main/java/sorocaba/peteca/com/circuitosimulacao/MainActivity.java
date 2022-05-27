@@ -16,8 +16,6 @@ public class MainActivity extends AppCompatActivity implements IntefaceSimulador
     double[] valores, valoresA, valoresB, valoresX, valoresY, valoresZ;
     SimuladorCircuito simulador;
     private boolean animacao = false;
-    private boolean animacaoResumePause = false;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,19 +77,20 @@ public class MainActivity extends AppCompatActivity implements IntefaceSimulador
 
         Button botaoAnimar = findViewById(R.id.botao_animar);
         botaoAnimar.setOnClickListener(view -> {
-            if (animacaoResumePause)
-                simulador.resumeAnimacao();
-            else
-                simulador.pauseAnimacao();
-            animacaoResumePause = !animacaoResumePause;
+            if(animacao)
+                simulador.pauseResumeAnimacao();
         });
 
         botaoAnimar.setOnLongClickListener(view -> {
-            if (animacao)
+            if (!animacao) {
                 simulador.startAnimacao();
-            else
+                botaoAnimar.setBackgroundColor(Color.GREEN);
+                animacao = true;
+            } else {
                 simulador.stopAnimacao();
-            animacao = !animacao;
+                botaoAnimar.setBackgroundColor(Color.RED);
+                animacao = false;
+            }
             return true;
         });
     }
@@ -127,5 +126,11 @@ public class MainActivity extends AppCompatActivity implements IntefaceSimulador
         circuito.trilha(new Ponto(12, 24), new Ponto(30, 24));
         circuito.trilha(new Ponto(30, 24), new Ponto(9, 24), new Ponto(9, 18));
         return 1;
+    }
+
+    @Override
+    protected void onPause() {
+        simulador.cancelTimer();
+        super.onPause();
     }
 }

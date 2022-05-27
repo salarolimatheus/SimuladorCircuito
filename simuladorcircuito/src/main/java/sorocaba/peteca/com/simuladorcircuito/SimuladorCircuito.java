@@ -6,7 +6,6 @@ import android.graphics.Color;
 import android.os.CountDownTimer;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.LinearLayout;
 
@@ -19,10 +18,11 @@ public class SimuladorCircuito extends LinearLayout implements Circuito.Interfac
     private Grafico graficoUm, graficoDois;
     private Circuito circuito;
     private Resultados resultados;
-    private CountDownTimer timer = null;
-
     IntefaceSimulador intefaceSimulador;
+
+    private CountDownTimer timer = null;
     private boolean animacao = false;
+    private boolean animacaoPausada = false;
 
     public void setSimuladorListener(IntefaceSimulador intefaceSimulador) {
         this.intefaceSimulador = intefaceSimulador;
@@ -52,15 +52,15 @@ public class SimuladorCircuito extends LinearLayout implements Circuito.Interfac
         resultados.setColorAngulo(Color.BLACK);
 
         graficoUm.setOnTouchListener((v, event) -> {
-                graficoUm.changeCursor(event);
-                graficoDois.setCursor(graficoUm.getCursor());
-                resultados.atualizarDados(graficoUm.pegaValorAtual(), graficoDois.pegaValorAtual(), graficoUm.pegaAnguloAtual());
+            graficoUm.changeCursor(event);
+            graficoDois.setCursor(graficoUm.getCursor());
+            resultados.atualizarDados(graficoUm.pegaValorAtual(), graficoDois.pegaValorAtual(), graficoUm.pegaAnguloAtual());
             return true;
         });
 
         graficoDois.setOnTouchListener((v, event) -> {
-                graficoDois.changeCursor(event);
-                graficoUm.setCursor(graficoDois.getCursor());
+            graficoDois.changeCursor(event);
+            graficoUm.setCursor(graficoDois.getCursor());
             resultados.atualizarDados(graficoUm.pegaValorAtual(), graficoDois.pegaValorAtual(), graficoDois.pegaAnguloAtual());
             return true;
         });
@@ -222,54 +222,8 @@ public class SimuladorCircuito extends LinearLayout implements Circuito.Interfac
     public void setCircuitoDimensao(int numeroDivisoesPrincipais) {
         circuito.setNumeroDivisoesPrincipais(numeroDivisoesPrincipais);
     }
-    //endregion
 
-    public void startAnimacao() {
-        this.animacao = true;
-        graficoUm.setAnimacao(true);
-        graficoDois.setAnimacao(true);
-        circuito.setAnimacao(true);
-
-        criarTimerSimulacao();
-    }
-    public void resumeAnimacao() {
-        if (animacao) {
-            graficoUm.setAnimacao(true);
-            graficoDois.setAnimacao(true);
-            long tempoInicial = (long) (6000f * (1 - ((graficoUm.getCursor()-graficoUm.getDimensaoX1Cursor())/graficoUm.getDimensaoX2Cursor())));
-            long tempoTick = 6000/((long) graficoUm.getSerieTamanho() * graficoUm.getNumeroPeriodos());
-            timer = new CountDownTimer(tempoInicial, tempoTick) {
-
-                public void onTick(long millisUntilFinished) {
-                    float cursor = (graficoUm.getDimensaoX1Cursor() + (1 - millisUntilFinished / 6000f) * graficoUm.getDimensaoX2Cursor());
-                    atualizaAnimacao(cursor);
-                }
-
-                public void onFinish() {
-                    criarTimerSimulacao();
-                }
-
-            }.start();
-        }
-    }
-    public void pauseAnimacao() {
-        if (animacao) {
-            timer.cancel();
-            graficoUm.setAnimacao(false);
-            graficoDois.setAnimacao(false);
-        }
-    }
-    public void stopAnimacao() {
-        this.animacao = false;
-        graficoUm.setAnimacao(false);
-        graficoDois.setAnimacao(false);
-        circuito.setAnimacao(false);
-        if(timer != null)
-            timer.cancel();
-    }
-
-    private void criarTimerSimulacao() {
-        long tempoInicial = 6000;
+    private void criarTimerSimulacao(long tempoInicial) {
         long tempoTick = 6000/((long) graficoUm.getSerieTamanho() * graficoUm.getNumeroPeriodos());
         timer = new CountDownTimer(tempoInicial, tempoTick) {
 
@@ -279,20 +233,65 @@ public class SimuladorCircuito extends LinearLayout implements Circuito.Interfac
             }
 
             public void onFinish() {
-                timer.start();
+                if (timer != null && animacao)
+                    criarTimerSimulacao(6000);
             }
-
         }.start();
     }
     private void atualizaAnimacao(float cursor) {
-        graficoDois.setCursor(cursor);
         graficoUm.setCursor(cursor);
+        graficoDois.setCursor(cursor);
         resultados.atualizarDados(graficoUm.pegaValorAtual(), graficoDois.pegaValorAtual(), graficoUm.pegaAnguloAtual());
-    }
-
-    //TODO: You need to call cTtimer.cancel() whenever the onDestroy()/onDestroyView() in the owning Activity/Fragment is called
-    public void cancelTimer() {
-        if(timer != null)
+        if(!animacao)
             timer.cancel();
     }
+    //endregion
+
+    public void startAnimacao() {
+        if (this.animacao)
+            return;
+
+        this.animacao = true;
+        this.animacaoPausada = false;
+        graficoUm.setAnimacao(true);
+        graficoDois.setAnimacao(true);
+        circuito.setAnimacao(true);
+
+        criarTimerSimulacao(6000);
+    }
+    public void pauseResumeAnimacao() {
+        if (!this.animacao)
+            return;
+
+        cancelTimer();
+        if (this.animacaoPausada) {
+        graficoUm.setAnimacao(true);
+        graficoDois.setAnimacao(true);
+        long tempoInicial = (long) (6000f * (1 - ((graficoUm.getCursor()-graficoUm.getDimensaoX1Cursor())/graficoUm.getDimensaoX2Cursor())));
+        criarTimerSimulacao(tempoInicial);
+        } else {
+            graficoUm.setAnimacao(false);
+            graficoDois.setAnimacao(false);
+        }
+        animacaoPausada = !animacaoPausada;
+    }
+    public void stopAnimacao() {
+        if (!this.animacao)
+            return;
+
+        this.animacao = false;
+        cancelTimer();
+        graficoUm.setAnimacao(false);
+        graficoDois.setAnimacao(false);
+        circuito.setAnimacao(false);
+    }
+
+    //You need to call cTtimer.cancel() whenever the onDestroy()/onDestroyView() in the owning Activity/Fragment is called
+    public void cancelTimer() {
+        if(timer != null) {
+            timer.cancel();
+        }
+    }
+
+
 }

@@ -216,7 +216,7 @@ public class Grafico extends View {
         pontoDoCursor = (int) ((x * serieEscolhida.tamanho) / Vm);
     }
     public void changeCursor(MotionEvent event) {
-        if (!animacao) {
+        if (animacao == false) {
             cursor = event.getX();
             changeCursor();
             invalidate();
