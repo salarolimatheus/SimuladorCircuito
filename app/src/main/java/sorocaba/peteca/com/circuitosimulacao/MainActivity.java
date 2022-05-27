@@ -9,7 +9,6 @@ import sorocaba.peteca.com.simuladorcircuito.graficosgerador.Serie;
 
 import android.graphics.Color;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 
 public class MainActivity extends AppCompatActivity implements IntefaceSimulador {
@@ -71,7 +70,10 @@ public class MainActivity extends AppCompatActivity implements IntefaceSimulador
         simulador.setCircuitoColor(Color.BLUE);
         simulador.setCircuitSelecaoColor(Color.DKGRAY);
         simulador.setCircuitoWidth(4);
-        simulador.setCircuitoGrade(true);
+        simulador.setCircuitoGrade(false);
+        simulador.setCircuitoTextSize(2f);
+
+        simulador.setAnimacaoTime(6000);
 
         simulador.setSimuladorListener(this);
 
@@ -117,10 +119,12 @@ public class MainActivity extends AppCompatActivity implements IntefaceSimulador
 
     @Override
     public int carregaCircuito(Circuito circuito) {
-        circuito.componente(new Ponto(9, 18), new Ponto(9, 12), 1, 1); // Fonte
+        circuito.componente(new Ponto(9, 18), new Ponto(9, 12), 1, 1, Color.RED, new Ponto(13, 16), "V1"); // Fonte
         circuito.trilha(new Ponto(9, 12), new Ponto(9, 6), new Ponto(24, 6));
+        circuito.texto(new Ponto(27, 11), "D1");
         circuito.componente(new Ponto(24, 6), new Ponto(30, 6), 2, 2); // Diodo
         circuito.trilha(new Ponto(30, 6), new Ponto(39, 6), new Ponto(39, 12));
+        circuito.texto(new Ponto(42, 16), "Carga");
         circuito.componente(new Ponto(39, 12), new Ponto(39, 18), 4, 3); // Carga
         circuito.trilha(new Ponto(39, 18), new Ponto(39, 24), new Ponto(12, 24));
         circuito.trilha(new Ponto(12, 24), new Ponto(30, 24));
@@ -130,7 +134,8 @@ public class MainActivity extends AppCompatActivity implements IntefaceSimulador
 
     @Override
     protected void onPause() {
-        simulador.cancelTimer();
+        simulador.stopAnimacao();
+        animacao = false;
         super.onPause();
     }
 }

@@ -1,8 +1,5 @@
 package sorocaba.peteca.com.simuladorcircuito.circuitogerador;
 
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.RectF;
 
@@ -218,6 +215,9 @@ class Desenho {
             }
         }
         return null;
+    }
+    Texto addTexto(Ponto ponto, String textoString) {
+        return new Texto(ponto.X * tamanhoMinimo, ponto.Y * tamanhoMinimo, textoString);
     }
 
     public Orientacao verificarOrientacao(Componente componente) {

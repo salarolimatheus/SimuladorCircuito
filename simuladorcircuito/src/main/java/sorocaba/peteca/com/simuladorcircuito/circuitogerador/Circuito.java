@@ -18,21 +18,24 @@ public class Circuito extends View {
     private final List<Path> pathCircuito = new ArrayList<>();
     private final List<Path> pathComponentes = new ArrayList<>();
     private final List<Componente> componenteList = new ArrayList<>();
+    private final List<Texto> textoComponenteList = new ArrayList<>();
+    private final List<Texto> textoList = new ArrayList<>();
     private Desenho libraryDesenhos;
 
     private Path pathGrade, pathSelecao;
-    private Paint paintGrade, paintSelecao, paintDesenhoCircuito;
+    private Paint paintGrade, paintSelecao, paintDesenhoCircuito, paintTextos;
     private RectF rectFundo;
 
     private int numDivisoesDimPrincipal = 30, numDivisoesDimSecundaria = 0, ultimoSelecionado = -1;
     private boolean orientacaoVertical = false;
-    private int distanciaPadrao = 0;
 
     InterfaceCircuito interfaceCircuito;
 
     // Variaveis disponiveis para o usuario fazer modificações
     private boolean statusGrade = false, componentesColoridosStatus = false;
     private int circuitoColor = Color.BLUE;
+    private float textSize = 2f;
+    private int distanciaPadrao;
 
     public void setCircuitoListener(InterfaceCircuito interfaceCircuito) {
         this.interfaceCircuito = interfaceCircuito;
@@ -65,6 +68,10 @@ public class Circuito extends View {
         paintDesenhoCircuito.setColor(Color.BLUE);
         paintDesenhoCircuito.setStyle(Paint.Style.STROKE);
 
+        paintTextos = new Paint();
+        paintTextos.setColor(Color.BLUE);
+        paintTextos.setTextAlign(Paint.Align.LEFT);
+
         pathGrade = new Path();
         pathSelecao = new Path();
     }
@@ -79,10 +86,10 @@ public class Circuito extends View {
             paintGrade.setColor(Color.WHITE);
         }
 
-        for (int elemento = 0; elemento < pathComponentes.size(); elemento++) {
-            Path path = this.pathComponentes.get(elemento);
+        for (int componente = 0; componente < pathComponentes.size(); componente++) {
+            Path path = this.pathComponentes.get(componente);
             if (path != null) {
-                int componenteColor = componenteList.get(elemento).componenteColor;
+                int componenteColor = componenteList.get(componente).componenteColor;
                 if(componentesColoridosStatus && componenteColor !=0) {
                     paintDesenhoCircuito.setColor(componenteColor);
                 } else {
@@ -102,6 +109,24 @@ public class Circuito extends View {
         if ((ultimoSelecionado > 0) && (pathSelecao != null))
             canvas.drawPath(pathSelecao, paintSelecao);
 
+        for (int textoIndex = 0; textoIndex < textoComponenteList.size(); textoIndex++) {
+            Texto texto = textoComponenteList.get(textoIndex);
+
+            int componenteColor = componenteList.get(textoIndex).componenteColor;
+            if(componentesColoridosStatus && componenteColor !=0) {
+                paintTextos.setColor(componenteColor);
+            } else {
+                paintTextos.setColor(circuitoColor);
+            }
+
+            canvas.drawText(texto.getString(), texto.getX(), texto.getY(), paintTextos);
+        }
+
+        paintTextos.setColor(circuitoColor);
+        for (int textoIndex = 0; textoIndex < textoList.size(); textoIndex++) {
+            Texto texto = textoList.get(textoIndex);
+            canvas.drawText(texto.getString(), texto.getX(), texto.getY(), paintTextos);
+        }
         super.onDraw(canvas);
     }
     @Override
@@ -111,6 +136,7 @@ public class Circuito extends View {
 
         ultimoSelecionado = -1;
         componenteList.clear();
+        textoList.clear();
 
         // DEFINE AS DIMENSOES DO CIRCUITO
         if (larguraTotal > alturaTotal) { // retangulo deitado
@@ -137,6 +163,7 @@ public class Circuito extends View {
         rectFundo = new RectF(0, 0, larguraTotal, alturaTotal);
 
         ultimoSelecionado = interfaceCircuito.carregaCircuito();
+        paintTextos.setTextSize(textSize * distanciaPadrao);
 
         for (Componente componente : componenteList) {
             if (componente.numeroComponente == ultimoSelecionado) {
@@ -240,6 +267,24 @@ public class Circuito extends View {
             }
         }
     }
+    public void componente(Ponto pontoUm, Ponto pontoDois, int tipoDeComponente, int numeroComponente, int componenteColor, Ponto pontoTexto, String texto) {
+        if (isValid(pontoUm) && isValid(pontoDois)) {
+            Path path = libraryDesenhos.addComponente(pontoUm, pontoDois, tipoDeComponente); // Ele atualiza os valores dos pontos
+            if (path != null) {
+                pathComponentes.add(path);
+                Componente componente = new Componente(numeroComponente, path, pontoUm, pontoDois, componenteColor);
+                componente.setDimensoes(libraryDesenhos.getDimensoes(pontoUm, pontoDois, tipoDeComponente));
+                componenteList.add(componente);
+            }
+            textoComponenteList.add(libraryDesenhos.addTexto(pontoTexto, texto));
+        }
+    }
+
+    public void texto(Ponto ponto, String texto) {
+        if (isValid(ponto)) {
+            textoList.add(libraryDesenhos.addTexto(ponto, texto));
+        }
+    }
 
     public void setCircuitoSelecaoColor(int circuitoSelecaoColor) {
         paintSelecao.setColor(circuitoSelecaoColor);
@@ -260,8 +305,12 @@ public class Circuito extends View {
     public void setComponentesColoridosStatus(boolean componentesColoridosStatus) {
         this.componentesColoridosStatus = componentesColoridosStatus;
     }
-
     public void setAnimacao(boolean animacao) {
         //TODO: TEM QUE PENSAR AINDA COMO VAI FAZER ESSA SIMULAÇÃO
     }
+    public void setCircuitoTextSize(float textSize) {
+        this.textSize = textSize;
+        paintTextos.setTextSize(textSize * distanciaPadrao);
+    }
+
 }
