@@ -219,6 +219,20 @@ class Desenho {
     Texto addTexto(Ponto ponto, String textoString) {
         return new Texto(ponto.X * tamanhoMinimo, ponto.Y * tamanhoMinimo, textoString);
     }
+    Path Seta(Ponto pontoUm, Ponto pontoDois) {
+        Orientacao orientacao = verificarOrientacao(pontoUm, pontoDois);
+        Path path = new Path();
+        if (orientacao == Orientacao.CIMA || orientacao == Orientacao.BAIXO) {
+            path.moveTo((pontoUm.X + 1) * tamanhoMinimo, pontoUm.Y * tamanhoMinimo);
+            path.lineTo(pontoDois.X * tamanhoMinimo, pontoDois.Y * tamanhoMinimo);
+            path.lineTo((pontoUm.X - 1) * tamanhoMinimo, pontoUm.Y * tamanhoMinimo);
+        } else if (orientacao == Orientacao.ESQUERDA || orientacao == Orientacao.DIREITA) {
+            path.moveTo(pontoUm.X  * tamanhoMinimo, (pontoUm.Y+ 1) * tamanhoMinimo);
+            path.lineTo(pontoDois.X * tamanhoMinimo, pontoDois.Y * tamanhoMinimo);
+            path.lineTo(pontoUm.X * tamanhoMinimo, (pontoUm.Y - 1) * tamanhoMinimo);
+        }
+        return path;
+    }
 
     public Orientacao verificarOrientacao(Componente componente) {
         Ponto pontoUm = componente.pontoUm, pontoDois = componente.pontoDois;

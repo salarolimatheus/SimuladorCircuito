@@ -56,6 +56,7 @@ public class SimuladorCircuito extends LinearLayout implements Circuito.Interfac
             graficoUm.changeCursor(event);
             graficoDois.setCursor(graficoUm.getCursor());
             resultados.atualizarDados(graficoUm.pegaValorAtual(), graficoDois.pegaValorAtual(), graficoUm.pegaAnguloAtual());
+            circuito.calcularAto(graficoUm.pegaAnguloAtual());
             return true;
         });
 
@@ -63,6 +64,7 @@ public class SimuladorCircuito extends LinearLayout implements Circuito.Interfac
             graficoDois.changeCursor(event);
             graficoUm.setCursor(graficoDois.getCursor());
             resultados.atualizarDados(graficoUm.pegaValorAtual(), graficoDois.pegaValorAtual(), graficoDois.pegaAnguloAtual());
+            circuito.calcularAto(graficoUm.pegaAnguloAtual());
             return true;
         });
 
@@ -94,8 +96,10 @@ public class SimuladorCircuito extends LinearLayout implements Circuito.Interfac
         graficoDois.setNumeroPeriodos(periodos);
         graficoUm.removePathFundo();
         graficoDois.removePathFundo();
-        if(graficoUm.serieEscolhida != null && graficoDois.serieEscolhida != null)
+        if(graficoUm.serieEscolhida != null && graficoDois.serieEscolhida != null) {
             resultados.atualizarDados(graficoUm.pegaValorAtual(), graficoDois.pegaValorAtual(), graficoDois.pegaAnguloAtual());
+            circuito.calcularAto(graficoUm.pegaAnguloAtual());
+        }
     }
     public void setCursorConfig(int cursorColor, int cursorWidth) {
         graficoUm.setCursorConfig(cursorColor, cursorWidth);
@@ -227,6 +231,13 @@ public class SimuladorCircuito extends LinearLayout implements Circuito.Interfac
         circuito.setCircuitoTextSize(textSize);
     }
 
+    public void setAnimacaoTime(long tempoAnimacao) {
+        this.tempoAnimacao = tempoAnimacao;
+    }
+    public void setCircuitoAnimacaoColor(int animacaoColor) {
+        circuito.setAnimacaoColor(animacaoColor);
+    }
+
     public void startAnimacao() {
         if (this.animacao)
             return;
@@ -265,7 +276,6 @@ public class SimuladorCircuito extends LinearLayout implements Circuito.Interfac
         graficoDois.setAnimacao(false);
         circuito.setAnimacao(false);
     }
-
     private void criarTimerSimulacao(long tempoInicial) {
         long tempoTick = tempoAnimacao/((long) graficoUm.getSerieTamanho() * graficoUm.getNumeroPeriodos());
         timer = new CountDownTimer(tempoInicial, tempoTick) {
@@ -285,17 +295,15 @@ public class SimuladorCircuito extends LinearLayout implements Circuito.Interfac
         graficoUm.setCursor(cursor);
         graficoDois.setCursor(cursor);
         resultados.atualizarDados(graficoUm.pegaValorAtual(), graficoDois.pegaValorAtual(), graficoUm.pegaAnguloAtual());
+        circuito.calcularAto(graficoUm.pegaAnguloAtual());
         if(!animacao)
             timer.cancel();
     }
-    //You need to call cTtimer.cancel() whenever the onDestroy()/onDestroyView() in the owning Activity/Fragment is called
     public void cancelTimer() {
+        //You need to call cTtimer.cancel() whenever the onDestroy()/onDestroyView() in the owning Activity/Fragment is called
         if(timer != null) {
             timer.cancel();
         }
-    }
-    public void setAnimacaoTime(long tempoAnimacao) {
-        this.tempoAnimacao = tempoAnimacao;
     }
     //endregion
 
