@@ -421,6 +421,7 @@ public class Circuito extends View {
     }
     public void setCircuitoWidth(int circuitoWidth) {
         paintDesenhoCircuito.setStrokeWidth(circuitoWidth);
+        paintAnimacao.setStrokeWidth(circuitoWidth);
     }
     public void setGradeStatus(boolean gradeStatus) {
         this.statusGrade = gradeStatus;

@@ -39,7 +39,6 @@ public class MainActivity extends AppCompatActivity implements IntefaceSimulador
         setContentView(R.layout.activity_main);
         simulador = findViewById(R.id.simulador);
 
-        //REVISTOS
         simulador.setNomeEixosGraficoUm("V", "ωt");
         simulador.setNomeEixosGraficoDois("A", "ωt");
 
@@ -132,7 +131,7 @@ public class MainActivity extends AppCompatActivity implements IntefaceSimulador
         circuito.trilha(new Ponto(12, 24), new Ponto(30, 24), 0);
         circuito.seta(new Ponto(24, 24), new Ponto(22, 24), 0);
         circuito.trilha(new Ponto(30, 24), new Ponto(9, 24), new Ponto(9, 18), 0);
-//
+
         circuito.texto(new Ponto(27, 11), "D1");
         circuito.texto(new Ponto(42, 16), "Carga");
         return 1;

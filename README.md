@@ -9,19 +9,16 @@ public class MainActivity extends AppCompatActivity implements SimuladorCircuito
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         
-        simulador = findViewById(R.id.simulador);
-
-        //REVISTOS
-        simulador.setNomeEixosGraficoUm("V", "ωt");
+		simulador.setNomeEixosGraficoUm("V", "ωt");
         simulador.setNomeEixosGraficoDois("A", "ωt");
 
-        simulador.setNumeroPeriodos(3);
+        simulador.setNumeroPeriodos(1);
         simulador.setCursorConfig(Color.BLUE, 3);
         simulador.setCursorStatus(true);
         simulador.setGradeStatus(true);
         simulador.setBetaStatus(true);
-        simulador.setOndasSimultaneasGraficoUm(true);
-        simulador.setOndasSimultaneasGraficoDois(true);
+        simulador.setOndasSimultaneasGraficoUm(false);
+        simulador.setOndasSimultaneasGraficoDois(false);
 
         simulador.setEixosWidth(5);
         simulador.setEixosHeigthMarcacoes(0.05f);
@@ -39,12 +36,15 @@ public class MainActivity extends AppCompatActivity implements SimuladorCircuito
         simulador.addCurvaFundo(new Serie(valoresX), 2);
         simulador.addCurva(new Serie(valores, 250), 2);
 
-        simulador.setSimuladorListener(this);
-
-        // NAO REVISTOS
         simulador.setCircuitoColor(Color.BLUE);
+        simulador.setCircuitSelecaoColor(Color.DKGRAY);
+        simulador.setCircuitoAnimacaoColor(Color.RED);
         simulador.setCircuitoWidth(4);
-        simulador.setCircuitoGrade(true);
+        simulador.setCircuitoGrade(false);
+        simulador.setCircuitoTextSize(2f);
+        simulador.setAnimacaoTime(6000);
+
+        simulador.setSimuladorListener(this);
     }
 
     @Override
@@ -56,19 +56,33 @@ public class MainActivity extends AppCompatActivity implements SimuladorCircuito
         }
     }
 
-    @Override
+   @Override
     public int carregaCircuito(Circuito circuito) {
-        circuito.componente(new Ponto(3, 6), new Ponto(3, 4), 1, 1); // Fonte
-        circuito.trilha(new Ponto(3, 4), new Ponto(3, 2), new Ponto(8, 2));
-        circuito.componente(new Ponto(8, 2), new Ponto(10, 2), 2, 2); // Diodo
-        circuito.trilha(new Ponto(10, 2), new Ponto(13, 2), new Ponto(13, 4));
-        circuito.componente(new Ponto(13, 4), new Ponto(13, 6), 4, 3); // Carga
-        circuito.trilha(new Ponto(13, 6), new Ponto(13, 8), new Ponto(12, 8));
-        circuito.trilha(new Ponto(12, 8), new Ponto(10, 8));
-        circuito.trilha(new Ponto(10, 8), new Ponto(3, 8), new Ponto(3, 6));
+        circuito.setAnimacaoConfig(new double[]{Math.PI, 2 * Math.PI});
+
+        circuito.componente( new Ponto(9, 18), new Ponto(9, 12), 1, 1, Color.RED, new Ponto(13, 16), "V1", 0); // Fonte
+        circuito.trilha(new Ponto(9, 12), new Ponto(9, 6), new Ponto(24, 6), 0);
+        circuito.seta(new Ponto(12, 6), new Ponto(14, 6), 0);
+        circuito.componente(new Ponto(24, 6), new Ponto(30, 6), 2, 2, 0); // Diodo
+        circuito.trilha(new Ponto(30, 6), new Ponto(39, 6), new Ponto(39, 12), 0);
+        circuito.seta(new Ponto(35, 6), new Ponto(37, 6), 0);
+        circuito.componente(new Ponto(39, 12), new Ponto(39, 18), 4, 3,0); // Carga
+        circuito.trilha(new Ponto(39, 18), new Ponto(39, 24), new Ponto(12, 24), 0);
+        circuito.trilha(new Ponto(12, 24), new Ponto(30, 24), 0);
+        circuito.seta(new Ponto(24, 24), new Ponto(22, 24), 0);
+        circuito.trilha(new Ponto(30, 24), new Ponto(9, 24), new Ponto(9, 18), 0);
+		
+        circuito.texto(new Ponto(27, 11), "D1");
+        circuito.texto(new Ponto(42, 16), "Carga");
         return 1;
     }
 
+    @Override
+    protected void onPause() {
+        simulador.stopAnimacao();
+        animacao = false;
+        super.onPause();
+    }
 
 }
 
