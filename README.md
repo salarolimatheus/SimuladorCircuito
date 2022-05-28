@@ -8,7 +8,8 @@
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
-			simulador.setNomeEixosGraficoUm("V", "ωt");
+		simulador = findViewById(R.id.simulador);
+		simulador.setNomeEixosGraficoUm("V", "ωt");
 		simulador.setNomeEixosGraficoDois("A", "ωt");
 
 		simulador.setNumeroPeriodos(1);
