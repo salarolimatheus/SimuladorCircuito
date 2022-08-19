@@ -12,12 +12,13 @@ Obs: O sistema possui uma certa flexibilidade com relação ao controle dos grá
 
 ## 📱 Visualização
 
-![tela-app](https://user-images.githubusercontent.com/34732144/185710857-4ef82893-b826-452b-aeb1-6fa6bb1f4175.gif)
+![tela-app](https://user-images.githubusercontent.com/34732144/185710857-4ef82893-b826-452b-aeb1-6fa6bb1f4175.gif) ![tela-curvas](https://user-images.githubusercontent.com/34732144/185717018-e09ff4ed-83f8-4b98-b986-2c166ded6573.jpg)
+
 
 ## 🛠️ Como funciona
 O simulador é dividido em três objetos: graficoUm, graficoDois e Circuito. Sendo que cada possui individualmente funções de configuração e modificações.
 
-![image](https://user-images.githubusercontent.com/34732144/185712032-d1348881-bb7d-4c72-81d5-3e35d458cfc1.png)
+![image](https://user-images.githubusercontent.com/34732144/185716258-debf435c-65b9-49db-adc1-ba29138f9c3b.png)
 
 ## Implementação XML
 Para adicionar o objeto no XML, basta utilizar a seguinte estrutura:
@@ -175,6 +176,26 @@ protected void onPause() {
 ```
 
 ### Criando o circuito e a animação
+A função carregaCircuito(Circuito circuito) deve ser reescrita para desenhar o circuito e criar a animação.
+
+Os componentes são colocados com coordenadas cartesianas como se estivesse em um plano. As dimensões e a orientação dos componentes são definidas pelos pontos inseridos, mantendo sempre a proporção do componente. Para inserir as informações, existem quatro tipos de funções para adicionar os elementos no gráfico: componente, trilha, seta e texto.
+| Função                                                                                                                                      	| Descrição                                                                     	|
+|---------------------------------------------------------------------------------------------------------------------------------------------	|-------------------------------------------------------------------------------	|
+| trilha(Ponto pontoUm, Ponto pontoDois)                                                                                                      	| Adiciona uma trilha entre dois pontos                                         	|
+| trilha(Ponto pontoUm, Ponto pontoDois, Ponto pontoTres)                                                                                     	| Adiciona uma trilha entre três pontos                                         	|
+| terra(Ponto pontoUm, Ponto pontoDois)                                                                                                       	| Adiciona um terra                                                             	|
+| bobina(Ponto pontoUm, Ponto pontoDois)                                                                                                      	| Adiciona uma bobina                                                           	|
+| componente(Ponto pontoUm, Ponto pontoDois, int tipoDeComponente, int numeroComponente)                                                      	| Adiciona um componente                                                        	|
+| componente(Ponto pontoUm, Ponto pontoDois, int tipoDeComponente, int numeroComponente, Ponto pontoTexto, String texto)                      	| Adiciona um componente com um texto em um ponto específico                    	|
+| componente(Ponto pontoUm, Ponto pontoDois, int tipoDeComponente, int numeroComponente, int componenteColor, Ponto pontoTexto, String texto) 	| Adiciona um componente de cor específica com um texto  em um ponto específico 	|
+| texto(Ponto ponto, String texto)                                                                                                            	| Adiciona um texto                                                             	|
+
+- As opções de componentes disponível até o momento são:
+
+
+**TODO: EXPLICAR SOBRE COMO FUNCIONA A ANIMAÇÃO E OS ATOS**
+
+Exemplo inserindo um retificador monofásico não controlado de meia onda com dois atos inscritos (de 0 a pi e de pi a 2*pi)
 ``` java
 @Override
 public int carregaCircuito(Circuito circuito) {
