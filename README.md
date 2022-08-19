@@ -19,7 +19,7 @@ O simulador é dividido em três objetos: graficoUm, graficoDois e Circuito. Sen
 
 ![image](https://user-images.githubusercontent.com/34732144/185712032-d1348881-bb7d-4c72-81d5-3e35d458cfc1.png)
 
-### Implementação XML
+## Implementação XML
 Para adicionar o objeto no XML, basta utilizar a seguinte estrutura:
 ```
     <sorocaba.peteca.com.simuladorcircuito.SimuladorCircuito
@@ -30,7 +30,7 @@ Para adicionar o objeto no XML, basta utilizar a seguinte estrutura:
         android:id="@+id/simulador"/>
 ```
 
-### Java
+## Java
 Primeiramente instanciamos o simulador.
 
 ``` java
@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity implements SimuladorCircuito
 	    ...
 }
 ```
-#### Configurando os gráficos e o circuito
+### Configurando os gráficos e o circuito
 Exemplo utilizando todas as configurações possíveis no onCreate (exemplo do projeto)
 ``` java
 @Override
@@ -94,7 +94,7 @@ protected void onCreate(Bundle savedInstanceState) {
 	simulador.setAnimacaoTime(6000);
 }
 ```
-- Funções relacionadas com os gráficos
+#### Funções relacionadas com os gráficos
 
 | Função                                                      	| Descrição                                                                                                  	|
 |-------------------------------------------------------------	|------------------------------------------------------------------------------------------------------------	|
@@ -128,7 +128,7 @@ protected void onCreate(Bundle savedInstanceState) {
 |                                                                                         	|                                                                                                                              	|
 
 
-- Funções relacionadas com o circuito
+#### Funções relacionadas com o circuito
 
 | Função                                            	| Descrição                                                                                                                         	|
 |---------------------------------------------------	|-----------------------------------------------------------------------------------------------------------------------------------	|
@@ -139,10 +139,19 @@ protected void onCreate(Bundle savedInstanceState) {
 | setCircuitoDimensao(int numeroDivisoesPrincipais) 	| Define o número de "pixels" que o retângulo onde o circuito é  desenhado vai possuir                                              	|
 | setCircuitoTextSize(float textSize)               	| Define o tamanho dos textos inseridos no circuito                                                                                 	|
 
-- Funções relacionadas com a animação
+#### Funções relacionadas com a animação
 
-#### Funções de Controle para fornecer a dinâmica dos componentes
-Algumas funções devem ser implementadas para realizar o controle dos componentes:
+| Função                                      	| Descrição                                         	|
+|---------------------------------------------	|---------------------------------------------------	|
+| setAnimacaoTime(long tempoAnimacao)         	| Define o tempo total da animação (padrão: 6 seg)  	|
+| setCircuitoAnimacaoColor(int animacaoColor) 	| Define a cor padrão quando o ato está funcionando 	|
+| startAnimacao()                             	| Inicia a animação                                 	|
+| pauseResumeAnimacao()                       	| Pausa ou retorna à animação                       	|
+| stopAnimacao()                              	| Para a animação                                   	|
+
+
+### Funções de Controle para fornecer a dinâmica dos componentes
+A função componenteClickado(int componente) deve ser reescrita para realizar o controle dos gráficos:
 ``` java
 @Override
 public void componenteClickado(int componente) {
@@ -152,7 +161,11 @@ public void componenteClickado(int componente) {
 	    simulador.addSerie(new Serie(valoresY, 15), 1);
 	}
 }
+```
 
+> **Warning**
+> Se estiver utilizando a animação, é necessário finalizar o timer da animação através do onPause() ou como preferir, pode gerar bugs
+```
 @Override
 protected void onPause() {
 	simulador.stopAnimacao();
@@ -161,6 +174,7 @@ protected void onPause() {
 }
 ```
 
+### Criando o circuito e a animação
 ``` java
 @Override
 public int carregaCircuito(Circuito circuito) {
