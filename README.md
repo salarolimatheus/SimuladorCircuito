@@ -130,7 +130,16 @@ protected void onCreate(Bundle savedInstanceState) {
 
 - Funções relacionadas com o circuito
 
+| Função                                            	| Descrição                                                                                                                         	|
+|---------------------------------------------------	|-----------------------------------------------------------------------------------------------------------------------------------	|
+| setCircuitSelecaoColor(int circuitoSelecaoColor)  	| Modifica a cor de seleção do componente (padrão: Color.DKGRAY)                                                                    	|
+| setCircuitoColor(int circuitoColor)               	| Modifica a cor do circuito(padrão: Color.BLUE)                                                                                    	|
+| setCircuitoWidth(int width)                       	| Modifica a espessura das linhas do circuito (padrão: 4)                                                                           	|
+| setCircuitoGrade(boolean gradeStatus)             	| Ativa ou desativa as linhas de grade do circuito (função utilizada  mais para visualizar o gráfico no período de desenvolvimento) 	|
+| setCircuitoDimensao(int numeroDivisoesPrincipais) 	| Define o número de "pixels" que o retângulo onde o circuito é  desenhado vai possuir                                              	|
+| setCircuitoTextSize(float textSize)               	| Define o tamanho dos textos inseridos no circuito                                                                                 	|
 
+- Funções relacionadas com a animação
 
 #### Funções de Controle para fornecer a dinâmica dos componentes
 Algumas funções devem ser implementadas para realizar o controle dos componentes:
