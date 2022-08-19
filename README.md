@@ -1,6 +1,32 @@
 # SimuladorCircuito
+![Badge em Desenvolvimento](http://img.shields.io/static/v1?label=STATUS&message=EM%20DESENVOLVIMENTO&color=GREEN&style=for-the-badge)
 
-	public class MainActivity extends AppCompatActivity implements SimuladorCircuito.IntefaceSimulador {
+[![](https://jitpack.io/v/salarolimatheus/EscolhaDinamica.svg)](https://github.com/salarolimatheus/SimuladorCircuito)
+
+Lorem Ipsum
+
+## 💡 Motivo
+Lorem Ipsum
+
+## 📱 Visualização
+
+Lorem Ipsum
+
+## 🛠️ Como funciona
+### XML
+Para adicionar o objeto no XML, basta utilizar a seguinte estrutura:
+```
+  <sorocaba.peteca.com.dinamicparam.DinamicParam
+    android:id="@+id/dinamic"
+    android:layout_width="230dp"
+    android:layout_height="120dp">
+  </sorocaba.peteca.com.dinamicparam.DinamicParam>
+```
+
+### Java
+Na parte do código em Java:
+```
+public class MainActivity extends AppCompatActivity implements SimuladorCircuito.IntefaceSimulador {
 	    SimuladorCircuito simulador;
 
 	    @Override
@@ -85,4 +111,10 @@
 	    }
 
 	}
+```
+#### Funções
+Lorem Ipsum
 
+## 📁 Créditos
+
+Lorem Ipsum
