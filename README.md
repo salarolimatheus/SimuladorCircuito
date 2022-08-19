@@ -15,9 +15,11 @@ Obs: O sistema possui uma certa flexibilidade com relação ao controle dos grá
 ![tela-app](https://user-images.githubusercontent.com/34732144/185710857-4ef82893-b826-452b-aeb1-6fa6bb1f4175.gif)
 
 ## 🛠️ Como funciona
+O simulador é dividido em três objetos: graficoUm, graficoDois e Circuito. Sendo que cada possui individualmente funções de configuração e modificações.
 
+![image](https://user-images.githubusercontent.com/34732144/185712032-d1348881-bb7d-4c72-81d5-3e35d458cfc1.png)
 
-### XML
+### Implementação XML
 Para adicionar o objeto no XML, basta utilizar a seguinte estrutura:
 ```
     <sorocaba.peteca.com.simuladorcircuito.SimuladorCircuito
@@ -29,17 +31,27 @@ Para adicionar o objeto no XML, basta utilizar a seguinte estrutura:
 ```
 
 ### Java
-Com relação ao código dinâmico, temos funções para configurar alguns valores e textos a serem impressos na tela e outros com relação às curvas.
-
-Inicialização
+Primeiramente instanciamos o simulador.
 
 ``` java
 public class MainActivity extends AppCompatActivity implements SimuladorCircuito.IntefaceSimulador {
 	    SimuladorCircuito simulador;
+	    
+	    @Override
+		protected void onCreate(Bundle savedInstanceState) {
+			super.onCreate(savedInstanceState);
+			setContentView(R.layout.activity_main);
+			simulador = findViewById(R.id.simulador);
+			simulador.setSimuladorListener(this);
+			...
+		}
+		
 	    ...
 }
+
+#### Configurando os gráficos e o circuito
 ```
-Iniciando as configurações no onCreate
+Exemplo utilizando todas as configurações possíveis no onCreate (exemplo do projeto)
 ``` java
 @Override
 protected void onCreate(Bundle savedInstanceState) {
@@ -81,11 +93,36 @@ protected void onCreate(Bundle savedInstanceState) {
 	simulador.setCircuitoGrade(false);
 	simulador.setCircuitoTextSize(2f);
 	simulador.setAnimacaoTime(6000);
-
-	simulador.setSimuladorListener(this);
 }
 ```
+**Funções relacionadas com os gráficos**
+| Função                                                      	| Descrição                                                                                                  	|
+|-------------------------------------------------------------	|------------------------------------------------------------------------------------------------------------	|
+| setNomeEixosGraficoUm(String nomeEixoY, String nomeEixoX)   	| Modifica o nome dos eixos X e Y do graficoUm                                                               	|
+| setNomeEixosGraficoDois(String nomeEixoY, String nomeEixoX) 	| Modifica o nome dos eixos X e Y do graficoDois                                                             	|
+| setNumeroPeriodos(int periodos)                             	| Modifica o número de periodos a serem repetidos na tela  (não é necessário enviar uma série com repetição) 	|
+| setCursorConfig(int cursorColor, int cursorWidth)           	| Modifica a cor e o a grossura do cursor                                                                    	|
+| setCursorStatus(boolean status)                             	| Ativa ou desativa o cursor dos gráficos                                                                    	|
+| setGradeStatus(boolean status)                              	| Ativa ou desativa as grades dos gráficos                                                                   	|
+| setBetaStatus(boolean status)                               	| Mostra o ângulo Beta nos gráficos                                                                          	|
+| setOndasSimultaneasGraficoUm (boolean status)               	| Ativa ou desativa múltiplas ondas do gráficoUm                                                             	|
+| setOndasSimultaneasGraficoDois (boolean status)             	| Ativa ou desativa múltiplas ondas do gráficoDois                                                           	|
+| setEixosWidth(int width)                                    	| Altera a grossura dos eixos (padrão: 5)                                                                    	|
+| setEixosHeigthMarcacoes(float width)                        	| Altera o tamanho das marcações dos eixos de ambos os gráficos (padrão: 0.05f)                              	|
+| setEixosTextSize(float width)                               	| Altera o tamanho dos textos dos eixos de ambos os  gráficos (padrão: 1.5f)                                 	|
+| setEixosSubTextSize(float width)                            	| Altera o tamanho dos subtextos dos eixos de ambos os gráficos (padrão: 1.3f)                               	|
+| setColorEscolhido(int color)                                	| Define a cor da curva escolhida do gráficoUm  (padrão: Color.BLUE)                                         	|
+| setColorFonteUm(int color)                                  	| Define a cor da curva primária do gráficoUm  (padrão: Color.RED)                                           	|
+| setColorFonteDois(int color)                                	| Define a cor da curva secundária do gráficoUm  (padrão: Color.GREEN)                                       	|
+| setColorFonteTres(int color)                                	| Define a cor da curva terciária do gráficoUm  (padrão: Color.MAGENTA)                                      	|
+| setColorCorrente(int color)                                 	| Defina a cor da curva padrão do gráficoDois  (padrão: Color.RED)                                           	|
+| setCurvaWidth(int curvaWidth)                               	| Define a espessura da curva dos gráficos (padrão: 5)                                                       	|
 
+**Funções relacionadas com o circuito**
+
+
+
+#### Funções de Controle para fornecer a dinâmica dos componentes
 Algumas funções devem ser implementadas para realizar o controle dos componentes:
 ``` java
 @Override
@@ -127,9 +164,3 @@ public int carregaCircuito(Circuito circuito) {
 	return 1;
 }
 ```
-#### Funções
-Lorem Ipsum
-
-## 📁 Créditos
-
-Lorem Ipsum
