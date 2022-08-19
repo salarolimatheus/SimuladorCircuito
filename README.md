@@ -3,16 +3,20 @@
 
 [![](https://jitpack.io/v/salarolimatheus/EscolhaDinamica.svg)](https://github.com/salarolimatheus/SimuladorCircuito)
 
-Uma tela de exibição de curvas de onda de um circuito eletrônico simulado (com dois gráficos independentes animação).
+Uma maneira fácil de exibir curvas de ondas de um circuito eletrônico utilizando dois gráficos, um circuito e animações. O projeto ainda está em desenvolvimento, pois o objetivo é acrescentar vários componentes à biblioteca atual.
 
 ## 💡 Motivo
-De modo a satisfazer um dos aplicativos em que eu trabalhei, realizei uma tela para apresentar curvas de ondas de tensão e corrente de circuitos eletrônicos. Com isso, o componente é dividido em três partes: dois gráficos para apresentação de duas variáveis e uma parte para o desenho do circuito como seleção dinâmica. O sistema tem uma certa flexibilidade com relação ao controle dos gráficos, é necessário que você inidique qual é a série a ser carregada e mostrada.
+Ao decorrer do desenvolvimento de uma aplicativo educacional de eletrônica de potência, eu precisei de uma tela para apresentar curvas de onda de tensão e corrente de um circuito eletrônico. Com isso, a ideia é ter dois gráficos que apresentam duas variáveis e um circuito com seleção dinâmica para modificar os gráficos e outros.
+
+Obs: O sistema possui uma certa flexibilidade com relação ao controle dos gráficos, sendo necessário indicar qual é a série a ser carregada e mostrada e qual o circuito a ser desenhado.
 
 ## 📱 Visualização
 
-Lorem Ipsum
+![tela-app](https://user-images.githubusercontent.com/34732144/185710857-4ef82893-b826-452b-aeb1-6fa6bb1f4175.gif)
 
 ## 🛠️ Como funciona
+
+
 ### XML
 Para adicionar o objeto no XML, basta utilizar a seguinte estrutura:
 ```
