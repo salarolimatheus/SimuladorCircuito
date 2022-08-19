@@ -3,7 +3,7 @@
 
 [![](https://jitpack.io/v/salarolimatheus/EscolhaDinamica.svg)](https://github.com/salarolimatheus/SimuladorCircuito)
 
-Uma maneira fácil de exibir curvas de ondas de um circuito eletrônico utilizando dois gráficos, um circuito e animações. O projeto ainda está em desenvolvimento, pois o objetivo é acrescentar vários componentes à biblioteca atual.
+Uma maneira fácil de exibir curvas de ondas de um circuito eletrônico utilizando dois gráficos, um circuito e animações em aplicativos Android. O projeto ainda está em desenvolvimento, pois o objetivo é acrescentar vários componentes à biblioteca atual.
 
 ## 💡 Motivo
 Ao decorrer do desenvolvimento de uma aplicativo educacional de eletrônica de potência, eu precisei de uma tela para apresentar curvas de onda de tensão e corrente de um circuito eletrônico. Com isso, a ideia é ter dois gráficos que apresentam duas variáveis e um circuito com seleção dinâmica para modificar os gráficos e outros.
@@ -190,10 +190,33 @@ Os componentes são colocados com coordenadas cartesianas como se estivesse em u
 | componente(Ponto pontoUm, Ponto pontoDois, int tipoDeComponente, int numeroComponente, int componenteColor, Ponto pontoTexto, String texto) 	| Adiciona um componente de cor específica com um texto  em um ponto específico 	|
 | texto(Ponto ponto, String texto)                                                                                                            	| Adiciona um texto                                                             	|
 
-- As opções de componentes disponível até o momento são:
+- As opções de componentes disponível até o momento são
+- 
+| número 	| Componente 	|
+|--------	|------------	|
+| 1      	| Fonte      	|
+| 2      	| Diodo      	|
+| 3      	| Tiristor   	|
+| 4      	| Carga R    	|
+| 5      	| Carga RL   	|
+| 6      	| Carga RLE  	|
+| 7      	| Carga RE   	|
 
+### Desenvolvendo uma animação
+Para desenvolver um efeito de animação, é necessário apenas configurar o número de Atos (como em uma peça de teatro). Em cada Ato, desenhos podem mudar de cor, aparecer ou desaparecer. Exemplo de configuração: circuito.setAnimacaoConfig(new double[]{Math.PI, 2 * Math.PI});
 
-**TODO: EXPLICAR SOBRE COMO FUNCIONA A ANIMAÇÃO E OS ATOS**
+No caso, nem todos os componentes precisam ser modificados durante os Atos, para que não sejam estáticos é preciso adicionar os Atos que cada elemento participará. Para fazer isto, basta utilizar as mesmas funções das tabelas acima adicionando um argumento final com uma array dos Atos.
+
+| Função                                                                                                                                                        	| Descrição                                                                                                 	|
+|---------------------------------------------------------------------------------------------------------------------------------------------------------------	|-----------------------------------------------------------------------------------------------------------	|
+| trilha(Ponto pontoUm, Ponto pontoDois, int[] numerosAto)                                                                                                      	| Adiciona uma trilha entre dois pontos para os atos selecionados                                           	|
+| trilha(Ponto pontoUm, Ponto pontoDois, Ponto pontoTres, int[] numerosAto)                                                                                     	| Adiciona uma trilha entre três pontos para os atos selecionados                                           	|
+| componente(Ponto pontoUm, Ponto pontoDois, int tipoDeComponente, int numeroComponente, int[] numerosAto)                                                      	| Adiciona um componente para os atos selecionados                                                          	|
+| componente(Ponto pontoUm, Ponto pontoDois, int tipoDeComponente, int numeroComponente, Ponto pontoTexto, String texto, int[] numerosAto)                      	| Adiciona um componente com um texto em um ponto específico para os atos selecionados                      	|
+| componente(Ponto pontoUm, Ponto pontoDois, int tipoDeComponente, int numeroComponente, int componenteColor, int[] numerosAto)                                 	| Adiciona um componente com uma cor específica para os atos selecionados                                   	|
+| componente(Ponto pontoUm, Ponto pontoDois, int tipoDeComponente, int numeroComponente, int componenteColor, Ponto pontoTexto, String texto, int[] numerosAto) 	| Adiciona um componente com uma cor específica e um texto em um ponto específico para os atos selecionados 	|
+| seta(Ponto pontoUm, Ponto pontoDois, int numeroAto)                                                                                                           	| Adiciona setas para os atos selecionados                                                                  	|
+
 
 Exemplo inserindo um retificador monofásico não controlado de meia onda com dois atos inscritos (de 0 a pi e de pi a 2*pi)
 ``` java
@@ -218,3 +241,6 @@ public int carregaCircuito(Circuito circuito) {
 	return 1;
 }
 ```
+
+## Em caso de dúvidas
+**Baixe o projeto, abra com o Android Studio, modifique os parâmetros livremente, compile e rode em um emulador Android**
