@@ -48,9 +48,8 @@ public class MainActivity extends AppCompatActivity implements SimuladorCircuito
 		
 	    ...
 }
-
-#### Configurando os gráficos e o circuito
 ```
+#### Configurando os gráficos e o circuito
 Exemplo utilizando todas as configurações possíveis no onCreate (exemplo do projeto)
 ``` java
 @Override
@@ -95,7 +94,8 @@ protected void onCreate(Bundle savedInstanceState) {
 	simulador.setAnimacaoTime(6000);
 }
 ```
-**Funções relacionadas com os gráficos**
+- Funções relacionadas com os gráficos
+
 | Função                                                      	| Descrição                                                                                                  	|
 |-------------------------------------------------------------	|------------------------------------------------------------------------------------------------------------	|
 | setNomeEixosGraficoUm(String nomeEixoY, String nomeEixoX)   	| Modifica o nome dos eixos X e Y do graficoUm                                                               	|
@@ -118,7 +118,17 @@ protected void onCreate(Bundle savedInstanceState) {
 | setColorCorrente(int color)                                 	| Defina a cor da curva padrão do gráficoDois  (padrão: Color.RED)                                           	|
 | setCurvaWidth(int curvaWidth)                               	| Define a espessura da curva dos gráficos (padrão: 5)                                                       	|
 
-**Funções relacionadas com o circuito**
+| Função                                                                                  	| Descrição                                                                                                                    	|
+|-----------------------------------------------------------------------------------------	|------------------------------------------------------------------------------------------------------------------------------	|
+| addCurva(Serie serie, int grafico)                                                      	| Adiciona uma unica série para o gráfico escolhido (inteiro igual a 1 ou 2)                                                   	|
+| addCurva(Serie serie, Serie serieDois, Serie serieTres, int grafico)                    	| Adiciona três séries para o gráfico escolhido (inteiro igual a 1 ou 2)                                                       	|
+| addCurva(Serie serie, Serie serieDois, Serie serieTres, Serie serieQuatro, int grafico) 	| Adiciona quatro séries para o gráfico escolhido (inteiro igual a 1 ou 2)                                                     	|
+| addCurvaFundo(Serie serie, int grafico)                                                 	| Adiciona uma curva de fundo à lista de curvas de fundo do gráfico escolhido,  esta função não remove as curvas já existentes 	|
+| removeCurvasFundo(int grafico)                                                          	| Limpa todas as curvas existentes relacionadas ao gráfico escolhido                                                           	|
+|                                                                                         	|                                                                                                                              	|
+
+
+- Funções relacionadas com o circuito
 
 
 
