@@ -29,14 +29,14 @@ Com relação ao código dinâmico, temos funções para configurar alguns valor
 
 Inicialização
 
-``` lang-java
-public class MainActivity extends AppCompatActivity **implements SimuladorCircuito.IntefaceSimulador** {
-	    **SimuladorCircuito simulador;**
+``` java
+public class MainActivity extends AppCompatActivity implements SimuladorCircuito.IntefaceSimulador {
+	    SimuladorCircuito simulador;
 	    ...
 }
 ```
 Iniciando as configurações no onCreate
-``` lang-java
+``` java
 @Override
 protected void onCreate(Bundle savedInstanceState) {
 	super.onCreate(savedInstanceState);
@@ -83,7 +83,7 @@ protected void onCreate(Bundle savedInstanceState) {
 ```
 
 Algumas funções devem ser implementadas para realizar o controle dos componentes:
-```
+``` java
 @Override
 public void componenteClickado(int componente) {
 	if (componente == 1) {
@@ -101,7 +101,7 @@ protected void onPause() {
 }
 ```
 
-```
+``` java
 @Override
 public int carregaCircuito(Circuito circuito) {
 	circuito.setAnimacaoConfig(new double[]{Math.PI, 2 * Math.PI});
