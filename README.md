@@ -126,7 +126,7 @@ protected void onCreate(Bundle savedInstanceState) {
 | addCurva(Serie serie, Serie serieDois, Serie serieTres, Serie serieQuatro, int grafico) 	| Adiciona quatro séries para o gráfico escolhido (inteiro igual a 1 ou 2)                                                     	|
 | addCurvaFundo(Serie serie, int grafico)                                                 	| Adiciona uma curva de fundo à lista de curvas de fundo do gráfico escolhido,  esta função não remove as curvas já existentes 	|
 | removeCurvasFundo(int grafico)                                                          	| Limpa todas as curvas existentes relacionadas ao gráfico escolhido
-| atualizaGraficos() 			                                                         	| Calcula os valores das series inseridas até o momento e desenha                                                           	|
+| atualizaGraficos() 			                                                         	| Calcula os valores das series inseridas no simulador e desenha as curvas nos gráficos                                                           	|
 |                                                                                         	|                                                                                                                              	|
 
 
