@@ -8,13 +8,17 @@ public class Serie {
         this.valor = valorY;
         max = max();
         tamanho = valorY.length;
+        this.beta = 0;
     }
 
-    public Serie(double[] valorY, int beta) {
+    public Serie(double[] valorY, boolean mostrarBeta) {
         this.valor = valorY;
         this.max = max();
         this.tamanho = valorY.length;
-        this.beta = beta;
+        if(mostrarBeta)
+            this.beta = beta();
+        else
+            this.beta = 0;
     }
 
     private int max() {
@@ -29,5 +33,12 @@ public class Serie {
         return index;
     }
 
-
+    private int beta() {
+        for (int i = 1; i < valor.length; i++) {
+            if (valor[i] < valor[i - 1] && valor[i] == 0) {
+                return i;
+            }
+        }
+        return 0;
+    }
 }

@@ -78,7 +78,7 @@ public class Circuito extends View {
         paintTextos.setTextAlign(Paint.Align.LEFT);
 
         paintAnimacao = new Paint();
-        paintAnimacao.setStrokeWidth(4);
+        paintAnimacao.setStrokeWidth(5);
         paintAnimacao.setColor(Color.RED);
         paintAnimacao.setStyle(Paint.Style.STROKE);
 
@@ -139,7 +139,13 @@ public class Circuito extends View {
         }
 
         if(animaCircuito && valoresPeriodosAtos != null) {
+            paintAnimacao.setStyle(Paint.Style.STROKE);
             Path path = this.pathAtosAnimacao.get(numeroAtoAtual).pathAto;
+            if (path != null)
+                canvas.drawPath(path, paintAnimacao);
+
+            paintAnimacao.setStyle(Paint.Style.FILL);
+            path = this.pathAtosAnimacao.get(numeroAtoAtual).pathSetas;
             if (path != null)
                 canvas.drawPath(path, paintAnimacao);
         }
@@ -247,13 +253,15 @@ public class Circuito extends View {
         if (isValid(pontoUm) && isValid(pontoDois))
             pathCircuito.add(libraryDesenhos.Trilha(pontoUm, pontoDois));
     }
-    public void trilha(Ponto pontoUm, Ponto pontoDois, int numeroAto) {
+    public void trilha(Ponto pontoUm, Ponto pontoDois, int[] numerosAto) {
         if (isValid(pontoUm) && isValid(pontoDois)) {
             Path path = libraryDesenhos.Trilha(pontoUm, pontoDois);
             pathCircuito.add(path);
-            if (numeroAto < pathAtosAnimacao.size() && numeroAto >= 0) {
-                Ato ato = pathAtosAnimacao.get(numeroAto);
-                ato.pathAto.addPath(path);
+            for (int numeroAto : numerosAto) {
+                if (numeroAto < pathAtosAnimacao.size() && numeroAto >= 0) {
+                    Ato ato = pathAtosAnimacao.get(numeroAto);
+                    ato.pathAto.addPath(path);
+                }
             }
         }
     }
@@ -262,13 +270,15 @@ public class Circuito extends View {
             pathCircuito.add(libraryDesenhos.Trilha(pontoUm, pontoDois, pontoTres));
         }
     }
-    public void trilha(Ponto pontoUm, Ponto pontoDois, Ponto pontoTres, int numeroAto) {
+    public void trilha(Ponto pontoUm, Ponto pontoDois, Ponto pontoTres, int[] numerosAto) {
         if (isValid(pontoUm) && isValid(pontoDois) && isValid(pontoTres)) {
             Path path = libraryDesenhos.Trilha(pontoUm, pontoDois, pontoTres);
             pathCircuito.add(path);
-            if (numeroAto < pathAtosAnimacao.size() && numeroAto >= 0) {
-                Ato ato = pathAtosAnimacao.get(numeroAto);
-                ato.pathAto.addPath(path);
+            for (int numeroAto : numerosAto) {
+                if (numeroAto < pathAtosAnimacao.size() && numeroAto >= 0) {
+                    Ato ato = pathAtosAnimacao.get(numeroAto);
+                    ato.pathAto.addPath(path);
+                }
             }
         }
     }
@@ -276,13 +286,15 @@ public class Circuito extends View {
         if (isValid(pontoUm) && isValid(pontoDois))
             pathCircuito.add(libraryDesenhos.Terra(pontoUm, pontoDois));
     }
-    public void terra(Ponto pontoUm, Ponto pontoDois, int numeroAto) {
+    public void terra(Ponto pontoUm, Ponto pontoDois, int[] numerosAto) {
         if (isValid(pontoUm) && isValid(pontoDois)){
             Path path = libraryDesenhos.Terra(pontoUm, pontoDois);
             pathCircuito.add(path);
-            if (numeroAto < pathAtosAnimacao.size() && numeroAto >= 0) {
-                Ato ato = pathAtosAnimacao.get(numeroAto);
-                ato.pathAto.addPath(path);
+            for (int numeroAto : numerosAto) {
+                if (numeroAto < pathAtosAnimacao.size() && numeroAto >= 0) {
+                    Ato ato = pathAtosAnimacao.get(numeroAto);
+                    ato.pathAto.addPath(path);
+                }
             }
         }
     }
@@ -291,13 +303,15 @@ public class Circuito extends View {
             pathCircuito.add(libraryDesenhos.Bobina(pontoUm, pontoDois));
         }
     }
-    public void bobina(Ponto pontoUm, Ponto pontoDois, int numeroAto) {
+    public void bobina(Ponto pontoUm, Ponto pontoDois, int[] numerosAto) {
         if (isValid(pontoUm) && isValid(pontoDois)) {
             Path path = libraryDesenhos.Bobina(pontoUm, pontoDois);
             pathCircuito.add(path);
-            if (numeroAto < pathAtosAnimacao.size() && numeroAto >= 0) {
-                Ato ato = pathAtosAnimacao.get(numeroAto);
-                ato.pathAto.addPath(path);
+            for (int numeroAto : numerosAto) {
+                if (numeroAto < pathAtosAnimacao.size() && numeroAto >= 0) {
+                    Ato ato = pathAtosAnimacao.get(numeroAto);
+                    ato.pathAto.addPath(path);
+                }
             }
         }
     }
@@ -313,7 +327,7 @@ public class Circuito extends View {
             }
         }
     }
-    public void componente(Ponto pontoUm, Ponto pontoDois, int tipoDeComponente, int numeroComponente, int numeroAto) {
+    public void componente(Ponto pontoUm, Ponto pontoDois, int tipoDeComponente, int numeroComponente, int[] numerosAto) {
         if (isValid(pontoUm) && isValid(pontoDois)) {
             Path path = libraryDesenhos.addComponente(pontoUm, pontoDois, tipoDeComponente); // Ele atualiza os valores dos pontos
             if (path != null) {
@@ -321,9 +335,11 @@ public class Circuito extends View {
                 Componente componente = new Componente(numeroComponente, path, pontoUm, pontoDois);
                 componente.setDimensoes(libraryDesenhos.getDimensoes(pontoUm, pontoDois, tipoDeComponente));
                 componenteList.add(componente);
-                if (numeroAto < pathAtosAnimacao.size() && numeroAto >= 0) {
-                    Ato ato = pathAtosAnimacao.get(numeroAto);
-                    ato.pathAto.addPath(path);
+                for (int numeroAto : numerosAto) {
+                    if (numeroAto < pathAtosAnimacao.size() && numeroAto >= 0) {
+                        Ato ato = pathAtosAnimacao.get(numeroAto);
+                        ato.pathAto.addPath(path);
+                    }
                 }
             }
         }
@@ -340,7 +356,7 @@ public class Circuito extends View {
             textoComponenteList.add(libraryDesenhos.addTexto(pontoTexto, texto));
         }
     }
-    public void componente(Ponto pontoUm, Ponto pontoDois, int tipoDeComponente, int numeroComponente, Ponto pontoTexto, String texto, int numeroAto) {
+    public void componente(Ponto pontoUm, Ponto pontoDois, int tipoDeComponente, int numeroComponente, Ponto pontoTexto, String texto, int[] numerosAto) {
         if (isValid(pontoUm) && isValid(pontoDois)) {
             Path path = libraryDesenhos.addComponente(pontoUm, pontoDois, tipoDeComponente); // Ele atualiza os valores dos pontos
             if (path != null) {
@@ -349,14 +365,16 @@ public class Circuito extends View {
                 componente.setDimensoes(libraryDesenhos.getDimensoes(pontoUm, pontoDois, tipoDeComponente));
                 componenteList.add(componente);
                 textoComponenteList.add(libraryDesenhos.addTexto(pontoTexto, texto));
-                if (numeroAto < pathAtosAnimacao.size() && numeroAto >= 0) {
-                    Ato ato = pathAtosAnimacao.get(numeroAto);
-                    ato.pathAto.addPath(path);
+                for (int numeroAto : numerosAto) {
+                    if (numeroAto < pathAtosAnimacao.size() && numeroAto >= 0) {
+                        Ato ato = pathAtosAnimacao.get(numeroAto);
+                        ato.pathAto.addPath(path);
+                    }
                 }
             }
         }
     }
-    public void componente(Ponto pontoUm, Ponto pontoDois, int tipoDeComponente, int numeroComponente, int componenteColor, int numeroAto) {
+    public void componente(Ponto pontoUm, Ponto pontoDois, int tipoDeComponente, int numeroComponente, int componenteColor, int[] numerosAto) {
         if (isValid(pontoUm) && isValid(pontoDois)) {
             Path path = libraryDesenhos.addComponente(pontoUm, pontoDois, tipoDeComponente); // Ele atualiza os valores dos pontos
             if (path != null) {
@@ -364,9 +382,11 @@ public class Circuito extends View {
                 Componente componente = new Componente(numeroComponente, path, pontoUm, pontoDois, componenteColor);
                 componente.setDimensoes(libraryDesenhos.getDimensoes(pontoUm, pontoDois, tipoDeComponente));
                 componenteList.add(componente);
-                if (numeroAto < pathAtosAnimacao.size() && numeroAto >= 0) {
-                    Ato ato = pathAtosAnimacao.get(numeroAto);
-                    ato.pathAto.addPath(path);
+                for (int numeroAto : numerosAto) {
+                    if (numeroAto < pathAtosAnimacao.size() && numeroAto >= 0) {
+                        Ato ato = pathAtosAnimacao.get(numeroAto);
+                        ato.pathAto.addPath(path);
+                    }
                 }
             }
         }
@@ -383,7 +403,7 @@ public class Circuito extends View {
             textoComponenteList.add(libraryDesenhos.addTexto(pontoTexto, texto));
         }
     }
-    public void componente(Ponto pontoUm, Ponto pontoDois, int tipoDeComponente, int numeroComponente, int componenteColor, Ponto pontoTexto, String texto, int numeroAto) {
+    public void componente(Ponto pontoUm, Ponto pontoDois, int tipoDeComponente, int numeroComponente, int componenteColor, Ponto pontoTexto, String texto, int[] numerosAto) {
         if (isValid(pontoUm) && isValid(pontoDois)) {
             Path path = libraryDesenhos.addComponente(pontoUm, pontoDois, tipoDeComponente); // Ele atualiza os valores dos pontos
             if (path != null) {
@@ -392,9 +412,11 @@ public class Circuito extends View {
                 componente.setDimensoes(libraryDesenhos.getDimensoes(pontoUm, pontoDois, tipoDeComponente));
                 componenteList.add(componente);
                 textoComponenteList.add(libraryDesenhos.addTexto(pontoTexto, texto));
-                if (numeroAto < pathAtosAnimacao.size() && numeroAto >= 0) {
-                    Ato ato = pathAtosAnimacao.get(numeroAto);
-                    ato.pathAto.addPath(path);
+                for (int numeroAto : numerosAto) {
+                    if (numeroAto < pathAtosAnimacao.size() && numeroAto >= 0) {
+                        Ato ato = pathAtosAnimacao.get(numeroAto);
+                        ato.pathAto.addPath(path);
+                    }
                 }
             }
         }
@@ -408,7 +430,7 @@ public class Circuito extends View {
     public void seta(Ponto pontoUm, Ponto pontoDois, int numeroAto) {
         if (isValid(pontoUm) && isValid(pontoDois) && numeroAto < pathAtosAnimacao.size() && numeroAto >= 0) {
             Ato ato = pathAtosAnimacao.get(numeroAto);
-            ato.pathAto.addPath(libraryDesenhos.Seta(pontoUm, pontoDois));
+            ato.pathSetas.addPath(libraryDesenhos.Seta(pontoUm, pontoDois));
         }
     }
 
@@ -421,7 +443,7 @@ public class Circuito extends View {
     }
     public void setCircuitoWidth(int circuitoWidth) {
         paintDesenhoCircuito.setStrokeWidth(circuitoWidth);
-        paintAnimacao.setStrokeWidth(circuitoWidth);
+        paintAnimacao.setStrokeWidth(circuitoWidth + 1);
     }
     public void setGradeStatus(boolean gradeStatus) {
         this.statusGrade = gradeStatus;

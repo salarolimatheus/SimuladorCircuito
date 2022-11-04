@@ -11,6 +11,9 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Grafico extends View {
     // Variaveis relacionados com o gráfico sem modificações
     private float alturaPontoX, alturaPontoY, alturaTotal, cursor, betaX;
@@ -18,7 +21,7 @@ public class Grafico extends View {
 
     private String[] periodosString = {"π/2", "π", "3π/2", "2π"};
     private int pontoDoCursor = 0;
-    private double valorMaximo = 0;
+    private double valorMaximo = 1;
 
     private Rect rect;
 
@@ -34,6 +37,7 @@ public class Grafico extends View {
     private boolean cursorStatus = false, gradeStatus = false, betaStatus = false, ondasSimultaneasStatus = false;
     private float tamanhoMarcacoes = 0.05f, tamanhoText = 1.5f, subtamanhoText = 1.3f;
     public Serie serieEscolhida, seriePrimaria, serieSecundaria, serieTerciaria;
+    public List<Serie> seriesFundo;
     private boolean animacao = false;
 
     public Grafico(Context context) {
@@ -113,6 +117,7 @@ public class Grafico extends View {
         pathCurvasTerciaria = new Path();
         pathCurvasFundo = new Path();
         rect = new Rect();
+        seriesFundo = new ArrayList<>();
     }
 
     private void atualizaEscala() {
@@ -123,29 +128,35 @@ public class Grafico extends View {
         }
         atualizaGrade();
     }
+
     private void atualizaTextosEixos(Canvas canvas) {
         paintTextos.setColor(Color.BLACK);
         paintTextos.setTextSize(tamanhoText * alturaPontoY);
         canvas.drawText(nomeEixoY, larguraPontoY / 2, alturaPontoY * (1 + tamanhoText / 2), paintTextos);
         canvas.drawText(nomeEixoX, (larguraPontoX + larguraTotal) / 2, alturaPontoX + tamanhoText / 4 * alturaPontoY, paintTextos);
 
-        if (betaStatus)
-            canvas.drawText("β", betaX, alturaPontoX * (1 - tamanhoMarcacoes), paintTextos);
+        if (betaStatus && betaX != 0)
+            canvas.drawText("β", betaX + larguraPontoY/3, alturaPontoX * (1 - 1.5f * tamanhoMarcacoes), paintTextos);
 
         paintTextos.setColor(Color.BLACK);
         paintTextos.setTextSize(subtamanhoText * alturaPontoY);
         for (int i = 1; i <= periodos; i++)
             canvas.drawText(periodosString[i - 1], (i * (larguraPontoX - larguraPontoY) / periodos) + larguraPontoY, alturaPontoX * (1 + tamanhoMarcacoes) + subtamanhoText * alturaPontoY, paintTextos);
     }
-    private void atualizaDados() {
+    public void atualizaDados() {
         pathCurvaEscolhida.reset();
         pathCurvaPrimaria.reset();
         pathCurvaSecundaria.reset();
         pathCurvasTerciaria.reset();
-        float valorMaximo = descobreValorMaximo();
+        pathCurvasFundo.reset();
+        descobreValorMaximo();
 
         if (serieEscolhida != null) {
-            betaX = (((larguraPontoX - larguraPontoY) * serieEscolhida.beta) / (serieEscolhida.tamanho * periodosReais) + larguraPontoY);
+            if (serieEscolhida.beta != 0) {
+                betaX = (((larguraPontoX - larguraPontoY) * serieEscolhida.beta) / (serieEscolhida.tamanho * periodosReais) + larguraPontoY);
+            } else {
+                betaX = 0;
+            }
             for (int periodo = 0; periodo < (periodosReais); periodo++) {
                 float esquerda = ((larguraPontoX - larguraPontoY) * periodo) / periodosReais + larguraPontoY;
                 float direita = ((larguraPontoX - larguraPontoY) * (periodo + 1)) / periodosReais + larguraPontoY;
@@ -167,11 +178,18 @@ public class Grafico extends View {
                     for (int i = 1; i < serieTerciaria.tamanho; i++)
                         pathCurvasTerciaria.lineTo((i * (direita - esquerda) / serieTerciaria.tamanho) + esquerda, (float) ((serieTerciaria.valor[i] / valorMaximo) * (alturaPontoY - alturaPontoX)) + alturaPontoX);
                 }
+
+                for (int serie = 0; serie < seriesFundo.size(); serie++) {
+                    pathCurvasFundo.moveTo(esquerda, (float) ((seriesFundo.get(serie).valor[0] / valorMaximo) * (alturaPontoY - alturaPontoX)) + alturaPontoX);
+                    for (int i = 1; i < seriesFundo.get(serie).tamanho; i++)
+                        pathCurvasFundo.lineTo((i * (direita - esquerda) / seriesFundo.get(serie).tamanho) + esquerda, (float) ((seriesFundo.get(serie).valor[i] / valorMaximo) * (alturaPontoY - alturaPontoX)) + alturaPontoX);
+                }
             }
         }
         invalidate();
     }
-    private float descobreValorMaximo() {
+
+    private void descobreValorMaximo() {
         if(serieEscolhida != null) {
             valorMaximo = Math.abs(serieEscolhida.valor[serieEscolhida.max]);
         }
@@ -187,7 +205,13 @@ public class Grafico extends View {
             if (Math.abs(serieTerciaria.valor[serieTerciaria.max]) > valorMaximo)
                 valorMaximo = Math.abs(serieTerciaria.valor[serieTerciaria.max]);
         }
-        return ((float) valorMaximo);
+        for (int i = 0; i < seriesFundo.size(); i++) {
+            if (Math.abs(seriesFundo.get(i).valor[seriesFundo.get(i).max]) > valorMaximo)
+                valorMaximo = Math.abs(seriesFundo.get(i).valor[seriesFundo.get(i).max]);
+        }
+
+        if(valorMaximo == 0)
+            valorMaximo = 1f;
     }
 
     private void atualizaGrade() {
@@ -236,7 +260,6 @@ public class Grafico extends View {
         this.seriePrimaria = null;
         this.serieSecundaria = null;
         this.serieTerciaria = null;
-        atualizaDados();
         atualizaPontoDados();
     }
     public void addSerie(Serie serie, Serie serieDois) {
@@ -244,7 +267,6 @@ public class Grafico extends View {
         this.seriePrimaria = serieDois;
         this.serieSecundaria = null;
         this.serieTerciaria = null;
-        atualizaDados();
         atualizaPontoDados();
     }
     public void addSerie(Serie serie, Serie serieDois, Serie serieTres) {
@@ -252,7 +274,6 @@ public class Grafico extends View {
         this.seriePrimaria = serieDois;
         this.serieSecundaria = serieTres;
         this.serieTerciaria = null;
-        atualizaDados();
         atualizaPontoDados();
     }
     public void addSerie(Serie serie, Serie serieDois, Serie serieTres, Serie serieQuatro) {
@@ -260,7 +281,6 @@ public class Grafico extends View {
         this.seriePrimaria = serieDois;
         this.serieSecundaria = serieTres;
         this.serieTerciaria = serieQuatro;
-        atualizaDados();
         atualizaPontoDados();
     }
 
@@ -454,17 +474,20 @@ public class Grafico extends View {
 
     //endregion
 
+    //TODO: CURVAS DE FUNDO ESTAO AQUI
     public void removePathFundo() {
-        pathCurvasFundo.reset();
+        seriesFundo.clear();
     }
     public void addCurvaFundo(Serie serieFundo) {
-        for (int periodo = 0; periodo < (periodosReais); periodo++) {
-            float esquerda = ((larguraPontoX - larguraPontoY) * periodo) / periodosReais + larguraPontoY;
-            float direita = ((larguraPontoX - larguraPontoY) * (periodo + 1)) / periodosReais + larguraPontoY;
-            pathCurvasFundo.moveTo(esquerda, (float) ((serieFundo.valor[0] / valorMaximo) * (alturaPontoY - alturaPontoX)) + alturaPontoX);
-            for (int i = 1; i < serieFundo.tamanho; i++)
-                pathCurvasFundo.lineTo((i * (direita - esquerda) / serieFundo.tamanho) + esquerda, (float) ((serieFundo.valor[i] / valorMaximo) * (alturaPontoY - alturaPontoX)) + alturaPontoX);
-        }
+        seriesFundo.add(serieFundo);
+
+//        for (int periodo = 0; periodo < (periodosReais); periodo++) {
+//            float esquerda = ((larguraPontoX - larguraPontoY) * periodo) / periodosReais + larguraPontoY;
+//            float direita = ((larguraPontoX - larguraPontoY) * (periodo + 1)) / periodosReais + larguraPontoY;
+//            pathCurvasFundo.moveTo(esquerda, (float) ((serieFundo.valor[0] / valorMaximo) * (alturaPontoY - alturaPontoX)) + alturaPontoX);
+//            for (int i = 1; i < serieFundo.tamanho; i++)
+//                pathCurvasFundo.lineTo((i * (direita - esquerda) / serieFundo.tamanho) + esquerda, (float) ((serieFundo.valor[i] / valorMaximo) * (alturaPontoY - alturaPontoX)) + alturaPontoX);
+//        }
     }
 
     public void setAnimacao(boolean animacao) {

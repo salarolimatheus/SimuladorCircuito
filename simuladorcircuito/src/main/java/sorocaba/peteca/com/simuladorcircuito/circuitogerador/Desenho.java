@@ -226,10 +226,12 @@ class Desenho {
             path.moveTo((pontoUm.X + 1) * tamanhoMinimo, pontoUm.Y * tamanhoMinimo);
             path.lineTo(pontoDois.X * tamanhoMinimo, pontoDois.Y * tamanhoMinimo);
             path.lineTo((pontoUm.X - 1) * tamanhoMinimo, pontoUm.Y * tamanhoMinimo);
+            path.close();
         } else if (orientacao == Orientacao.ESQUERDA || orientacao == Orientacao.DIREITA) {
             path.moveTo(pontoUm.X  * tamanhoMinimo, (pontoUm.Y+ 1) * tamanhoMinimo);
             path.lineTo(pontoDois.X * tamanhoMinimo, pontoDois.Y * tamanhoMinimo);
             path.lineTo(pontoUm.X * tamanhoMinimo, (pontoUm.Y - 1) * tamanhoMinimo);
+            path.close();
         }
         return path;
     }

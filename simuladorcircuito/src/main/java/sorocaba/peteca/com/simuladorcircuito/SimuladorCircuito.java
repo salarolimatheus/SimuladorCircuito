@@ -196,6 +196,10 @@ public class SimuladorCircuito extends LinearLayout implements Circuito.Interfac
             graficoDois.addSerie(serie, serieDois, serieTres, serieQuatro);
         }
     }
+    public void atualizaGraficos() {
+        graficoUm.atualizaDados();
+        graficoDois.atualizaDados();
+    }
 
     public void addCurvaFundo(Serie serie, int grafico) {
         if (grafico == 1) {
