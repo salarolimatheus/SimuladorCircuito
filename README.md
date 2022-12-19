@@ -192,6 +192,7 @@ Os componentes são colocados com coordenadas cartesianas como se estivesse em u
 | texto(Ponto ponto, String texto)                                                                                                            	| Adiciona um texto                                                             	|
 
 - As opções de componentes disponível até o momento são:
+
 | número 	| Componente 	|
 |--------	|------------	|
 | 1      	| Fonte      	|
