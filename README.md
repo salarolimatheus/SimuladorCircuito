@@ -191,8 +191,7 @@ Os componentes são colocados com coordenadas cartesianas como se estivesse em u
 | componente(Ponto pontoUm, Ponto pontoDois, int tipoDeComponente, int numeroComponente, int componenteColor, Ponto pontoTexto, String texto) 	| Adiciona um componente de cor específica com um texto  em um ponto específico 	|
 | texto(Ponto ponto, String texto)                                                                                                            	| Adiciona um texto                                                             	|
 
-- As opções de componentes disponível até o momento são
-- 
+- As opções de componentes disponível até o momento são:
 | número 	| Componente 	|
 |--------	|------------	|
 | 1      	| Fonte      	|
