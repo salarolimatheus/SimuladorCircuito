@@ -120,7 +120,6 @@ public class MainActivity extends AppCompatActivity implements IntefaceSimulador
             simulador.removeCurvasFundo(1);
             simulador.removeCurvasFundo(2);
             simulador.addCurva(new Serie(valoresX), null, new Serie(valoresZ), 1);
-//            simulador.addCurvaFundo(new Serie(valoresC), 1);
             simulador.addCurva(new Serie(valoresC, true), 2);
         } else if (componente == 2) {
             simulador.removeCurvasFundo(1);
@@ -140,22 +139,25 @@ public class MainActivity extends AppCompatActivity implements IntefaceSimulador
 
     @Override
     public int carregaCircuito(Circuito circuito) {
-        circuito.setAnimacaoConfig(new double[]{Math.PI, 2 * Math.PI});
+        circuito.setAnimacaoConfig(new double[]{0, 0, 0, 0, 0, 0});
 
-        circuito.componente( new Ponto(9, 18), new Ponto(9, 12), 1, 1, Color.RED, new Ponto(13, 16), "V1", new int[]{0}); // Fonte
-        circuito.trilha(new Ponto(9, 12), new Ponto(9, 6), new Ponto(24, 6), new int[]{0});
-        circuito.seta(new Ponto(12, 6), new Ponto(14, 6), 0);
-        circuito.componente(new Ponto(24, 6), new Ponto(30, 6), 2, 2, new int[]{0}); // Diodo
-        circuito.trilha(new Ponto(30, 6), new Ponto(39, 6), new Ponto(39, 12), new int[]{0});
-        circuito.seta(new Ponto(35, 6), new Ponto(37, 6), 0);
-        circuito.componente(new Ponto(39, 12), new Ponto(39, 18), 4, 3,new int[]{0}); // Carga
-        circuito.trilha(new Ponto(39, 18), new Ponto(39, 24), new Ponto(12, 24), new int[]{0});
-        circuito.trilha(new Ponto(12, 24), new Ponto(30, 24), new int[]{0});
-        circuito.seta(new Ponto(24, 24), new Ponto(22, 24), 0);
-        circuito.trilha(new Ponto(30, 24), new Ponto(9, 24), new Ponto(9, 18), new int[]{0});
+        int[] ato = {0, 2};
+        circuito.componente(new Ponto(9, 18), new Ponto(9, 12), 1, 1, Color.RED, new Ponto(13, 16), "V1", ato); // Fonte
+        circuito.trilha(new Ponto(9, 12), new Ponto(9, 6), new Ponto(24, 6), ato);
+        circuito.seta(new Ponto(12, 6), new Ponto(14, 6), 1);
+        circuito.componente(new Ponto(24, 6), new Ponto(30, 6), 2, 2, ato); // Diodo
+        circuito.trilha(new Ponto(30, 6), new Ponto(39, 6), new Ponto(39, 12), ato);
+        circuito.seta(new Ponto(35, 6), new Ponto(37, 6), 1);
+        circuito.componente(new Ponto(39, 12), new Ponto(39, 18), 4, 3, ato); // Carga
+        circuito.trilha(new Ponto(39, 18), new Ponto(39, 24), new Ponto(12, 24), ato);
+        circuito.trilha(new Ponto(12, 24), new Ponto(30, 24), ato);
+        circuito.seta(new Ponto(24, 24), new Ponto(22, 24), 1);
+        circuito.trilha(new Ponto(30, 24), new Ponto(9, 24), new Ponto(9, 18), ato);
 
         circuito.texto(new Ponto(27, 11), "D1");
         circuito.texto(new Ponto(42, 16), "Carga");
+
+        circuito.setAnimacaoConfig(new double[]{0, (Math.PI/4), (Math.PI/2), Math.PI, Math.PI, 2 * Math.PI});
         return 1;
     }
 

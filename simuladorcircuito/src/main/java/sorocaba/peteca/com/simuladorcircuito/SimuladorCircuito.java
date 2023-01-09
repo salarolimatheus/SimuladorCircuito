@@ -295,6 +295,7 @@ public class SimuladorCircuito extends LinearLayout implements Circuito.Interfac
             }
         }.start();
     }
+
     private void atualizaAnimacao(float cursor) {
         graficoUm.setCursor(cursor);
         graficoDois.setCursor(cursor);

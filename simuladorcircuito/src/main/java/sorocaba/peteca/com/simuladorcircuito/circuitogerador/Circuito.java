@@ -466,6 +466,7 @@ public class Circuito extends View {
     public void setAnimacaoColor(int animacaoColor) {
         paintAnimacao.setColor(animacaoColor);
     }
+
     public void setAnimacaoConfig(double[] valoresAtos) {
         this.numeroAtoAtual = 0;
         this.valoresPeriodosAtos = valoresAtos;
@@ -473,17 +474,17 @@ public class Circuito extends View {
             pathAtosAnimacao.add(new Ato(new Path(), numeroAto));
     }
     public void calcularAto(double valorOmegaTempo) {
-        if (valoresPeriodosAtos != null) {
-            valorOmegaTempo = valorOmegaTempo % (2*Math.PI);
-            if (valorOmegaTempo >= 0 && valorOmegaTempo < valoresPeriodosAtos[0])
-                numeroAtoAtual = 0;
-            else {
-                for (int index = 1; index < valoresPeriodosAtos.length; index++) {
-                    if (valorOmegaTempo >= valoresPeriodosAtos[index-1] && valorOmegaTempo < valoresPeriodosAtos[index])
-                        numeroAtoAtual = index;
-                }
+        this.numeroAtoAtual = 0;
+        if (valoresPeriodosAtos == null)
+            return;
+
+        valorOmegaTempo = valorOmegaTempo % (2*Math.PI);
+        for (int index = 0; index < (this.valoresPeriodosAtos.length - 1); index++) {
+            if ((valorOmegaTempo >= this.valoresPeriodosAtos[index]) && (valorOmegaTempo < this.valoresPeriodosAtos[index+1])) {
+                this.numeroAtoAtual = index;
             }
-            invalidate();
         }
+
+        invalidate();
     }
 }
