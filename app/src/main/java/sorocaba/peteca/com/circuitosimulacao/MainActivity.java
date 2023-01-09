@@ -36,11 +36,11 @@ public class MainActivity extends AppCompatActivity implements IntefaceSimulador
 
             if ((valores_x[iteracao] >= 0) && (valores_x[iteracao] <= Math.PI)) {
                 valoresY[iteracao] = valoresX[iteracao];
-                valoresZ[iteracao] = 0;
+                valoresZ[iteracao] = valores_x[iteracao] + 1;
                 valoresC[iteracao] = valoresX[iteracao] / 2;
             } else {
                 valoresY[iteracao] = 0;
-                valoresZ[iteracao] = 0;//valoresX[iteracao];
+                valoresZ[iteracao] = valores_x[iteracao];
                 valoresC[iteracao] = 0;
             }
         }
@@ -103,28 +103,37 @@ public class MainActivity extends AppCompatActivity implements IntefaceSimulador
             }
             return true;
         });
+
+        Button botaoPeriodos = findViewById(R.id.botao_periodos);
+        final int[] periodos = {1};
+        botaoPeriodos.setOnClickListener(view -> {
+            periodos[0]++;
+            if(periodos[0] == 5)
+                periodos[0] = 1;
+            simulador.setNumeroPeriodos(periodos[0]);
+        });
     }
 
     @Override
     public void componenteClickado(int componente) {
         if (componente == 1) {
             simulador.removeCurvasFundo(1);
-            simulador.addCurva(new Serie(valoresX), null, new Serie(valoresX2), 1);
-//            simulador.addCurvaFundo(new Serie(valoresC), 1);
             simulador.removeCurvasFundo(2);
+            simulador.addCurva(new Serie(valoresX), null, new Serie(valoresZ), 1);
+//            simulador.addCurvaFundo(new Serie(valoresC), 1);
             simulador.addCurva(new Serie(valoresC, true), 2);
         } else if (componente == 2) {
             simulador.removeCurvasFundo(1);
-            simulador.addCurva(new Serie(valoresZ), new Serie(valores), null, 1);
             simulador.removeCurvasFundo(2);
+            simulador.addCurva(new Serie(valoresZ), new Serie(valores), null, 1);
             simulador.addCurva(new Serie(valoresC, true), 2);
         } else {
             simulador.removeCurvasFundo(1);
-            simulador.addCurva(new Serie(valoresY), 1);
             simulador.removeCurvasFundo(2);
+            simulador.addCurva(new Serie(valoresY), 1);
             simulador.addCurva(new Serie(valoresC, true), 2);
-            simulador.addCurvaFundo(new Serie(valoresY), 2);
-            simulador.addCurvaFundo(new Serie(valoresX2), 2);
+            simulador.addCurvaFundo(new Serie(valoresZ), 2);
+//            simulador.addCurvaFundo(new Serie(valoresX2), 2);
         }
         simulador.atualizaGraficos();
     }

@@ -83,7 +83,6 @@ public class SimuladorCircuito extends LinearLayout implements Circuito.Interfac
         return componente;
     }
 
-    //region  REVISTOS
     public void setNomeEixosGraficoUm(String nomeEixoY, String nomeEixoX) {
         graficoUm.setNomeEixos(nomeEixoY, nomeEixoX);
     }
@@ -94,8 +93,6 @@ public class SimuladorCircuito extends LinearLayout implements Circuito.Interfac
     public void setNumeroPeriodos(int periodos) {
         graficoUm.setNumeroPeriodos(periodos);
         graficoDois.setNumeroPeriodos(periodos);
-        graficoUm.removePathFundo();
-        graficoDois.removePathFundo();
         if(graficoUm.serieEscolhida != null && graficoDois.serieEscolhida != null) {
             resultados.atualizarDados(graficoUm.pegaValorAtual(), graficoDois.pegaValorAtual(), graficoDois.pegaAnguloAtual());
             circuito.calcularAto(graficoUm.pegaAnguloAtual());
@@ -238,6 +235,9 @@ public class SimuladorCircuito extends LinearLayout implements Circuito.Interfac
     public void setAnimacaoTime(long tempoAnimacao) {
         this.tempoAnimacao = tempoAnimacao;
     }
+    public void setAnimacaoConfig(double[] atos) {
+        circuito.setAnimacaoConfig(atos);
+    }
     public void setCircuitoAnimacaoColor(int animacaoColor) {
         circuito.setAnimacaoColor(animacaoColor);
     }
@@ -309,6 +309,5 @@ public class SimuladorCircuito extends LinearLayout implements Circuito.Interfac
             timer.cancel();
         }
     }
-    //endregion
 
 }

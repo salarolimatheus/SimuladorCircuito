@@ -160,30 +160,65 @@ public class Grafico extends View {
             for (int periodo = 0; periodo < (periodosReais); periodo++) {
                 float esquerda = ((larguraPontoX - larguraPontoY) * periodo) / periodosReais + larguraPontoY;
                 float direita = ((larguraPontoX - larguraPontoY) * (periodo + 1)) / periodosReais + larguraPontoY;
-                pathCurvaEscolhida.moveTo(esquerda, (float) ((serieEscolhida.valor[0] / valorMaximo) * (alturaPontoY - alturaPontoX)) + alturaPontoX);
+
+                // Desenho da curva principal
+                if (periodo == 0) {
+                    pathCurvaEscolhida.moveTo(esquerda, (float) ((serieEscolhida.valor[0] / valorMaximo) * (alturaPontoY - alturaPontoX)) + alturaPontoX);
+                } else {
+                    pathCurvaEscolhida.lineTo(esquerda, (float) ((serieEscolhida.valor[0] / valorMaximo) * (alturaPontoY - alturaPontoX)) + alturaPontoX);
+                }
                 for (int i = 1; i < serieEscolhida.tamanho; i++)
                     pathCurvaEscolhida.lineTo((i * (direita - esquerda) / serieEscolhida.tamanho) + esquerda, (float) ((serieEscolhida.valor[i] / valorMaximo) * (alturaPontoY - alturaPontoX)) + alturaPontoX);
+                // Fim do desenho da curva principal
+
+                // Desenho da curva primaria
                 if (seriePrimaria != null) {
-                    pathCurvaPrimaria.moveTo(esquerda, (float) ((seriePrimaria.valor[0] / valorMaximo) * (alturaPontoY - alturaPontoX)) + alturaPontoX);
+                    if (periodo == 0) {
+                        pathCurvaPrimaria.moveTo(esquerda, (float) ((seriePrimaria.valor[0] / valorMaximo) * (alturaPontoY - alturaPontoX)) + alturaPontoX);
+                    } else {
+                        pathCurvaPrimaria.lineTo(esquerda, (float) ((seriePrimaria.valor[0] / valorMaximo) * (alturaPontoY - alturaPontoX)) + alturaPontoX);
+                    }
                     for (int i = 1; i < seriePrimaria.tamanho; i++)
                         pathCurvaPrimaria.lineTo((i * (direita - esquerda) / seriePrimaria.tamanho) + esquerda, (float) ((seriePrimaria.valor[i] / valorMaximo) * (alturaPontoY - alturaPontoX)) + alturaPontoX);
                 }
+                // Fim do desenho da curva primaria
+
+                // Desenho da curva secundaria
                 if (serieSecundaria != null) {
-                    pathCurvaSecundaria.moveTo(esquerda, (float) ((serieSecundaria.valor[0] / valorMaximo) * (alturaPontoY - alturaPontoX)) + alturaPontoX);
+                    if (periodo == 0) {
+                        pathCurvaSecundaria.moveTo(esquerda, (float) ((serieSecundaria.valor[0] / valorMaximo) * (alturaPontoY - alturaPontoX)) + alturaPontoX);
+                    } else {
+                        pathCurvaSecundaria.lineTo(esquerda, (float) ((serieSecundaria.valor[0] / valorMaximo) * (alturaPontoY - alturaPontoX)) + alturaPontoX);
+                    }
                     for (int i = 1; i < serieSecundaria.tamanho; i++)
                         pathCurvaSecundaria.lineTo((i * (direita - esquerda) / serieSecundaria.tamanho) + esquerda, (float) ((serieSecundaria.valor[i] / valorMaximo) * (alturaPontoY - alturaPontoX)) + alturaPontoX);
                 }
+                // Fim do desenho da curva secundaria
+
+                // Desenho da curva terciaria
                 if (serieTerciaria != null) {
-                    pathCurvasTerciaria.moveTo(esquerda, (float) ((serieTerciaria.valor[0] / valorMaximo) * (alturaPontoY - alturaPontoX)) + alturaPontoX);
+                    if (periodo == 0) {
+                        pathCurvasTerciaria.moveTo(esquerda, (float) ((serieTerciaria.valor[0] / valorMaximo) * (alturaPontoY - alturaPontoX)) + alturaPontoX);
+                    } else {
+                        pathCurvasTerciaria.lineTo(esquerda, (float) ((serieTerciaria.valor[0] / valorMaximo) * (alturaPontoY - alturaPontoX)) + alturaPontoX);
+                    }
                     for (int i = 1; i < serieTerciaria.tamanho; i++)
                         pathCurvasTerciaria.lineTo((i * (direita - esquerda) / serieTerciaria.tamanho) + esquerda, (float) ((serieTerciaria.valor[i] / valorMaximo) * (alturaPontoY - alturaPontoX)) + alturaPontoX);
                 }
+                // Fim do desenho da curva terciaria
 
+                // Desenho das curvas de fundo
                 for (int serie = 0; serie < seriesFundo.size(); serie++) {
-                    pathCurvasFundo.moveTo(esquerda, (float) ((seriesFundo.get(serie).valor[0] / valorMaximo) * (alturaPontoY - alturaPontoX)) + alturaPontoX);
+                    if (periodo == 0) {
+                        pathCurvasFundo.moveTo(esquerda, (float) ((seriesFundo.get(serie).valor[0] / valorMaximo) * (alturaPontoY - alturaPontoX)) + alturaPontoX);
+                    } else {
+                        pathCurvasFundo.lineTo(esquerda, (float) ((seriesFundo.get(serie).valor[0] / valorMaximo) * (alturaPontoY - alturaPontoX)) + alturaPontoX);
+                    }
                     for (int i = 1; i < seriesFundo.get(serie).tamanho; i++)
                         pathCurvasFundo.lineTo((i * (direita - esquerda) / seriesFundo.get(serie).tamanho) + esquerda, (float) ((seriesFundo.get(serie).valor[i] / valorMaximo) * (alturaPontoY - alturaPontoX)) + alturaPontoX);
                 }
+                // Fim do desenho das curvas de fundo
+
             }
         }
         invalidate();
@@ -238,6 +273,8 @@ public class Grafico extends View {
         float Vm = (larguraPontoX - larguraPontoY) / periodosReais;
         float x = cursor - larguraPontoY;
         pontoDoCursor = (int) ((x * serieEscolhida.tamanho) / Vm);
+        if (pontoDoCursor == serieEscolhida.tamanho)
+            pontoDoCursor = serieEscolhida.tamanho - 1;
     }
     public void changeCursor(MotionEvent event) {
         if (animacao == false) {
@@ -474,7 +511,6 @@ public class Grafico extends View {
 
     //endregion
 
-    //TODO: CURVAS DE FUNDO ESTAO AQUI
     public void removePathFundo() {
         seriesFundo.clear();
     }
