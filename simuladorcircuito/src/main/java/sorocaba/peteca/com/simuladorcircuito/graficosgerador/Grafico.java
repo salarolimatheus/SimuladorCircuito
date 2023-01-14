@@ -14,6 +14,7 @@ import android.view.View;
 import java.util.ArrayList;
 import java.util.List;
 
+
 public class Grafico extends View {
     // Variaveis relacionados com o gráfico sem modificações
     private float alturaPontoX, alturaPontoY, alturaTotal, cursor, betaX;
@@ -38,6 +39,7 @@ public class Grafico extends View {
     private float tamanhoMarcacoes = 0.05f, tamanhoText = 1.5f, subtamanhoText = 1.3f;
     public Serie serieEscolhida, seriePrimaria, serieSecundaria, serieTerciaria;
     public List<Serie> seriesFundo;
+    public List<PontoSeriesFundo> pontosSeriesFundo;
     private boolean animacao = false;
 
     public Grafico(Context context) {
@@ -118,6 +120,7 @@ public class Grafico extends View {
         pathCurvasFundo = new Path();
         rect = new Rect();
         seriesFundo = new ArrayList<>();
+        pontosSeriesFundo = new ArrayList<>();
     }
 
     private void atualizaEscala() {
@@ -212,10 +215,13 @@ public class Grafico extends View {
                     if (periodo == 0) {
                         pathCurvasFundo.moveTo(esquerda, (float) ((seriesFundo.get(serie).valor[0] / valorMaximo) * (alturaPontoY - alturaPontoX)) + alturaPontoX);
                     } else {
+                        pathCurvasFundo.moveTo(pontosSeriesFundo.get(serie).X, pontosSeriesFundo.get(serie).Y);
                         pathCurvasFundo.lineTo(esquerda, (float) ((seriesFundo.get(serie).valor[0] / valorMaximo) * (alturaPontoY - alturaPontoX)) + alturaPontoX);
                     }
                     for (int i = 1; i < seriesFundo.get(serie).tamanho; i++)
                         pathCurvasFundo.lineTo((i * (direita - esquerda) / seriesFundo.get(serie).tamanho) + esquerda, (float) ((seriesFundo.get(serie).valor[i] / valorMaximo) * (alturaPontoY - alturaPontoX)) + alturaPontoX);
+
+                    pontosSeriesFundo.get(serie).setPontoSeriesFundo(((seriesFundo.get(serie).tamanho - 1) * (direita - esquerda) / seriesFundo.get(serie).tamanho) + esquerda, (float) ((seriesFundo.get(serie).valor[(seriesFundo.get(serie).tamanho - 1)] / valorMaximo) * (alturaPontoY - alturaPontoX)) + alturaPontoX);
                 }
                 // Fim do desenho das curvas de fundo
 
@@ -513,17 +519,11 @@ public class Grafico extends View {
 
     public void removePathFundo() {
         seriesFundo.clear();
+        pontosSeriesFundo.clear();
     }
     public void addCurvaFundo(Serie serieFundo) {
         seriesFundo.add(serieFundo);
-
-//        for (int periodo = 0; periodo < (periodosReais); periodo++) {
-//            float esquerda = ((larguraPontoX - larguraPontoY) * periodo) / periodosReais + larguraPontoY;
-//            float direita = ((larguraPontoX - larguraPontoY) * (periodo + 1)) / periodosReais + larguraPontoY;
-//            pathCurvasFundo.moveTo(esquerda, (float) ((serieFundo.valor[0] / valorMaximo) * (alturaPontoY - alturaPontoX)) + alturaPontoX);
-//            for (int i = 1; i < serieFundo.tamanho; i++)
-//                pathCurvasFundo.lineTo((i * (direita - esquerda) / serieFundo.tamanho) + esquerda, (float) ((serieFundo.valor[i] / valorMaximo) * (alturaPontoY - alturaPontoX)) + alturaPontoX);
-//        }
+        pontosSeriesFundo.add(new PontoSeriesFundo());
     }
 
     public void setAnimacao(boolean animacao) {

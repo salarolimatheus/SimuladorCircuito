@@ -10,7 +10,6 @@ import sorocaba.peteca.com.simuladorcircuito.graficosgerador.Serie;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.widget.Button;
-import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity implements IntefaceSimulador {
     double[] valores, valoresC, valoresX, valoresX2, valoresY, valoresZ;
@@ -36,11 +35,11 @@ public class MainActivity extends AppCompatActivity implements IntefaceSimulador
 
             if ((valores_x[iteracao] >= 0) && (valores_x[iteracao] <= Math.PI)) {
                 valoresY[iteracao] = valoresX[iteracao];
-                valoresZ[iteracao] = valores_x[iteracao] + 1;
+                valoresZ[iteracao] = 8 * (valores_x[iteracao] + 1);
                 valoresC[iteracao] = valoresX[iteracao] / 2;
             } else {
                 valoresY[iteracao] = 0;
-                valoresZ[iteracao] = valores_x[iteracao];
+                valoresZ[iteracao] = 8 * valores_x[iteracao];
                 valoresC[iteracao] = 0;
             }
         }
@@ -119,7 +118,9 @@ public class MainActivity extends AppCompatActivity implements IntefaceSimulador
         if (componente == 1) {
             simulador.removeCurvasFundo(1);
             simulador.removeCurvasFundo(2);
-            simulador.addCurva(new Serie(valoresX), null, new Serie(valoresZ), 1);
+            simulador.addCurvaFundo(new Serie(valoresX), 1);
+            simulador.addCurvaFundo(new Serie(valoresX2), 1);
+            simulador.addCurva(new Serie(valoresX), null, null, 1);
             simulador.addCurva(new Serie(valoresC, true), 2);
         } else if (componente == 2) {
             simulador.removeCurvasFundo(1);
@@ -129,9 +130,10 @@ public class MainActivity extends AppCompatActivity implements IntefaceSimulador
         } else {
             simulador.removeCurvasFundo(1);
             simulador.removeCurvasFundo(2);
+            simulador.addCurvaFundo(new Serie(valoresX2), 1);
+            simulador.addCurvaFundo(new Serie(valoresZ), 1);
             simulador.addCurva(new Serie(valoresY), 1);
             simulador.addCurva(new Serie(valoresC, true), 2);
-            simulador.addCurvaFundo(new Serie(valoresZ), 2);
 //            simulador.addCurvaFundo(new Serie(valoresX2), 2);
         }
         simulador.atualizaGraficos();

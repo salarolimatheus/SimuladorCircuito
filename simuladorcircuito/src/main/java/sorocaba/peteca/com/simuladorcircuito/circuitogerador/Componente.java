@@ -1,6 +1,5 @@
 package sorocaba.peteca.com.simuladorcircuito.circuitogerador;
 
-import android.graphics.Color;
 import android.graphics.Path;
 
 public class Componente {
