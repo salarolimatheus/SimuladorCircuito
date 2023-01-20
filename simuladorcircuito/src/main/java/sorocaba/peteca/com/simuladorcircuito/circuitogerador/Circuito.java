@@ -159,6 +159,7 @@ public class Circuito extends View {
 
         ultimoSelecionado = -1;
         componenteList.clear();
+        textoComponenteList.clear();
         textoList.clear();
 
         // DEFINE AS DIMENSOES DO CIRCUITO
@@ -352,8 +353,8 @@ public class Circuito extends View {
                 Componente componente = new Componente(numeroComponente, path, pontoUm, pontoDois);
                 componente.setDimensoes(libraryDesenhos.getDimensoes(pontoUm, pontoDois, tipoDeComponente));
                 componenteList.add(componente);
+                textoComponenteList.add(libraryDesenhos.addTexto(pontoTexto, texto));
             }
-            textoComponenteList.add(libraryDesenhos.addTexto(pontoTexto, texto));
         }
     }
     public void componente(Ponto pontoUm, Ponto pontoDois, int tipoDeComponente, int numeroComponente, Ponto pontoTexto, String texto, int[] numerosAto) {
@@ -399,8 +400,8 @@ public class Circuito extends View {
                 Componente componente = new Componente(numeroComponente, path, pontoUm, pontoDois, componenteColor);
                 componente.setDimensoes(libraryDesenhos.getDimensoes(pontoUm, pontoDois, tipoDeComponente));
                 componenteList.add(componente);
+                textoComponenteList.add(libraryDesenhos.addTexto(pontoTexto, texto));
             }
-            textoComponenteList.add(libraryDesenhos.addTexto(pontoTexto, texto));
         }
     }
     public void componente(Ponto pontoUm, Ponto pontoDois, int tipoDeComponente, int numeroComponente, int componenteColor, Ponto pontoTexto, String texto, int[] numerosAto) {

@@ -144,20 +144,17 @@ public class MainActivity extends AppCompatActivity implements IntefaceSimulador
         circuito.setAnimacaoConfig(new double[]{0, 0, 0, 0, 0, 0});
 
         int[] ato = {0, 2};
-        circuito.componente(new Ponto(9, 18), new Ponto(9, 12), 1, 1, Color.RED, new Ponto(13, 16), "V1", ato); // Fonte
+        circuito.componente(new Ponto(24, 6), new Ponto(30, 6), 2, 2, new Ponto(27, 11), "D1", ato); // Diodo
         circuito.trilha(new Ponto(9, 12), new Ponto(9, 6), new Ponto(24, 6), ato);
+        circuito.componente(new Ponto(9, 18), new Ponto(9, 12), 1, 1, Color.RED, new Ponto(13, 16), "V1", ato); // Fonte
         circuito.seta(new Ponto(12, 6), new Ponto(14, 6), 1);
-        circuito.componente(new Ponto(24, 6), new Ponto(30, 6), 2, 2, ato); // Diodo
         circuito.trilha(new Ponto(30, 6), new Ponto(39, 6), new Ponto(39, 12), ato);
         circuito.seta(new Ponto(35, 6), new Ponto(37, 6), 1);
-        circuito.componente(new Ponto(39, 12), new Ponto(39, 18), 4, 3, ato); // Carga
+        circuito.componente(new Ponto(39, 12), new Ponto(39, 18), 4, 3, new Ponto(42, 16), "Carga", ato); // Carga
         circuito.trilha(new Ponto(39, 18), new Ponto(39, 24), new Ponto(12, 24), ato);
         circuito.trilha(new Ponto(12, 24), new Ponto(30, 24), ato);
         circuito.seta(new Ponto(24, 24), new Ponto(22, 24), 1);
         circuito.trilha(new Ponto(30, 24), new Ponto(9, 24), new Ponto(9, 18), ato);
-
-        circuito.texto(new Ponto(27, 11), "D1");
-        circuito.texto(new Ponto(42, 16), "Carga");
 
         circuito.setAnimacaoConfig(new double[]{0, (Math.PI/4), (Math.PI/2), Math.PI, Math.PI, 2 * Math.PI});
         return 1;
