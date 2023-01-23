@@ -156,6 +156,7 @@ public class Circuito extends View {
     protected void onSizeChanged(int larguraTotal, int alturaTotal, int oldw, int oldh) {
         pathGrade.reset();
         pathComponentes.clear();
+        pathCircuito.clear();
 
         ultimoSelecionado = -1;
         componenteList.clear();
