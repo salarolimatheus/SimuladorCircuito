@@ -1,7 +1,7 @@
 # SimuladorCircuito
 ![Badge em Desenvolvimento](http://img.shields.io/static/v1?label=STATUS&message=EM%20DESENVOLVIMENTO&color=GREEN&style=for-the-badge)
 
-[![](https://jitpack.io/v/salarolimatheus/EscolhaDinamica.svg)](https://github.com/salarolimatheus/SimuladorCircuito)
+[![](https://jitpack.io/v/salarolimatheus/SimuladorCircuito.svg)](https://jitpack.io/#salarolimatheus/SimuladorCircuito)
 
 Uma maneira fácil de exibir curvas de ondas de um circuito eletrônico utilizando dois gráficos, um circuito e animações em aplicativos Android. O projeto ainda está em desenvolvimento, pois o objetivo é acrescentar vários componentes à biblioteca atual.
 
