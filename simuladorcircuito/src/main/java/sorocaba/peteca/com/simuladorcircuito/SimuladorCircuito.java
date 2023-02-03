@@ -282,8 +282,9 @@ public class SimuladorCircuito extends LinearLayout implements Circuito.Interfac
     }
     private void criarTimerSimulacao(long tempoInicial) {
         long tempoTick = tempoAnimacao/((long) graficoUm.getSerieTamanho() * graficoUm.getNumeroPeriodos());
-        if (tempoTick == 0)
-            tempoTick = 1;
+        if (tempoTick < 15) { // Ajuste do tempoTick para atualização da tela e da capacidade do olho humano de percepção de movimento
+            tempoTick = 15;
+        }
         timer = new CountDownTimer(tempoInicial, tempoTick) {
 
             public void onTick(long millisUntilFinished) {
