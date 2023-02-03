@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.widget.Button;
 
 public class MainActivity extends AppCompatActivity implements IntefaceSimulador {
+    private static final int NUMERO_PONTOS = 2048;
     double[] valores, valoresC, valoresX, valoresX2, valoresY, valoresZ;
     SimuladorCircuito simulador;
     private boolean animacao = false;
@@ -19,14 +20,14 @@ public class MainActivity extends AppCompatActivity implements IntefaceSimulador
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        double[] valores_x = new double[256];
-        valores = new double[256];
+        double[] valores_x = new double[NUMERO_PONTOS];
+        valores = new double[NUMERO_PONTOS];
 
-        valoresX = new double[256];
-        valoresX2 = new double[256];
-        valoresY = new double[256];
-        valoresZ = new double[256];
-        valoresC = new double[256];
+        valoresX = new double[NUMERO_PONTOS];
+        valoresX2 = new double[NUMERO_PONTOS];
+        valoresY = new double[NUMERO_PONTOS];
+        valoresZ = new double[NUMERO_PONTOS];
+        valoresC = new double[NUMERO_PONTOS];
 
         for (int iteracao = 0; iteracao < valores.length; iteracao++) {
             valores_x[iteracao] = iteracao * 2 * Math.PI/valores.length;
@@ -134,29 +135,29 @@ public class MainActivity extends AppCompatActivity implements IntefaceSimulador
             simulador.addCurvaFundo(new Serie(valoresZ), 1);
             simulador.addCurva(new Serie(valoresY), 1);
             simulador.addCurva(new Serie(valoresC, true), 2);
-//            simulador.addCurvaFundo(new Serie(valoresX2), 2);
         }
         simulador.atualizaGraficos();
     }
 
     @Override
     public int carregaCircuito(Circuito circuito) {
-        circuito.setAnimacaoConfig(new double[]{0, 0, 0, 0, 0, 0});
-
-        int[] ato = {0, 2};
-        circuito.componente(new Ponto(24, 6), new Ponto(30, 6), 2, 2, new Ponto(27, 11), "D1", ato); // Diodo
-        circuito.trilha(new Ponto(9, 12), new Ponto(9, 6), new Ponto(24, 6), ato);
-        circuito.componente(new Ponto(9, 18), new Ponto(9, 12), 1, 1, Color.RED, new Ponto(13, 16), "V1", ato); // Fonte
+        circuito.setAnimacaoConfig(new double[]{0, 0, Math.PI, 2 * Math.PI});
+        int[] atoConducao = new int[]{1};
+        circuito.componente( new Ponto(9, 18), new Ponto(9, 12), 1, 1, new Ponto(13, 16), "V1", atoConducao); // Fonte
+        circuito.trilha(new Ponto(9, 12), new Ponto(9, 6), new Ponto(22, 6), atoConducao);
         circuito.seta(new Ponto(12, 6), new Ponto(14, 6), 1);
-        circuito.trilha(new Ponto(30, 6), new Ponto(39, 6), new Ponto(39, 12), ato);
+        circuito.componente(new Ponto(22, 6), new Ponto(28, 6), 2, 2, new Ponto(24, 11), "D1", atoConducao); // Diodo
+        circuito.trilha(new Ponto(28, 6), new Ponto(39, 6), atoConducao);
         circuito.seta(new Ponto(35, 6), new Ponto(37, 6), 1);
-        circuito.componente(new Ponto(39, 12), new Ponto(39, 18), 4, 3, new Ponto(42, 16), "Carga", ato); // Carga
-        circuito.trilha(new Ponto(39, 18), new Ponto(39, 24), new Ponto(12, 24), ato);
-        circuito.trilha(new Ponto(12, 24), new Ponto(30, 24), ato);
-        circuito.seta(new Ponto(24, 24), new Ponto(22, 24), 1);
-        circuito.trilha(new Ponto(30, 24), new Ponto(9, 24), new Ponto(9, 18), ato);
 
-        circuito.setAnimacaoConfig(new double[]{0, (Math.PI/4), (Math.PI/2), Math.PI, Math.PI, 2 * Math.PI});
+        circuito.trilha(new Ponto(39, 6), new Ponto(39, 12), atoConducao);
+        circuito.componente(new Ponto(39, 12), new Ponto(39, 18), 4, 3, new Ponto(42, 16), "Load", atoConducao); // Carga
+        circuito.trilha(new Ponto(39, 18), new Ponto(39, 24), atoConducao);
+
+        circuito.trilha(new Ponto(39, 24), new Ponto(30, 24), atoConducao);
+        circuito.seta(new Ponto(24, 24), new Ponto(22, 24), 1);
+        circuito.trilha(new Ponto(30, 24), new Ponto(9, 24), new Ponto(9, 18), atoConducao);
+
         return 1;
     }
 
