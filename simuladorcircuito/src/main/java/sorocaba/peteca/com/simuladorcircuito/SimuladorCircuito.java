@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.LinearLayout;
 
 import androidx.annotation.Nullable;
+
 import sorocaba.peteca.com.simuladorcircuito.circuitogerador.Circuito;
 import sorocaba.peteca.com.simuladorcircuito.graficosgerador.Grafico;
 import sorocaba.peteca.com.simuladorcircuito.graficosgerador.Serie;

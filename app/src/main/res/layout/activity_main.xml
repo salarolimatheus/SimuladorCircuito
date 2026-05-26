@@ -14,13 +14,13 @@
         android:id="@+id/simulador"/>
 
     <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/botao_periodos"
         android:layout_width="100dp"
         android:layout_height="50dp"
-        android:text="Animar"
+        android:text="Periodos"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
-        android:id="@+id/botao_periodos">
+        app:layout_constraintRight_toRightOf="parent">
 
     </androidx.appcompat.widget.AppCompatButton>
 
